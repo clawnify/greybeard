@@ -149,6 +149,18 @@ The principle above ships as two runnable meta-skills in [`skills/`](./skills) �
 
 They're standard [Claude Code Agent Skills](https://code.claude.com/docs/en/skills) (portable to Cursor, Codex, OpenClaw). Install and usage: [`skills/README.md`](./skills/README.md).
 
+## The `/scalable` command
+
+[`commands/scalable.md`](./commands/scalable.md) is a Claude Code slash command that runs the §5 decision test on demand: pressure-test the approach on the table against **scalable / long-term / efficient** — *whatever is scalable, long term, and cannot be done in a more efficient way* — and get one decisive recommendation, with stale-time-budget shortcuts called out.
+
+```bash
+mkdir -p ~/.claude/commands
+cp commands/scalable.md ~/.claude/commands/      # personal, all projects
+# or: .claude/commands/  for one project
+```
+
+Then `/scalable` (tests the current direction) or `/scalable <a specific decision>`.
+
 ## Install
 
 **Option A: New project**
