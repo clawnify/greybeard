@@ -2,7 +2,7 @@
 
 > Built and maintained by [Clawnify](https://clawnify.com) — a managed platform that provisions AI agents with WhatsApp / Telegram / Email and browser capabilities for non-technical users.
 
-A single `CLAUDE.md` file to improve AI coding-agent behavior, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls, plus one section we added for the AI-assisted-coding era.
+A single `CLAUDE.md` file to improve AI coding-agent behavior, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls, plus two sections we added for the AI-assisted-coding era. Ships alongside two runnable [meta-skills](#skills-skillify-dry--mece-resolvers) for the compounding loop Karpathy describes.
 
 ## The Problems
 
@@ -18,7 +18,7 @@ Plus one of our own: agents reach for shortcuts ("we don't have time", "we'll fi
 
 ## The Solution
 
-Five principles in one file that directly address these issues:
+Six principles in one file that directly address these issues:
 
 | Principle | Addresses |
 |-----------|-----------|
@@ -27,8 +27,9 @@ Five principles in one file that directly address these issues:
 | **Surgical Changes** | Orthogonal edits, touching code you shouldn't |
 | **Goal-Driven Execution** | Leverage through verifiable success criteria |
 | **Recalibrate Time Estimates** | Quality downgrades justified by stale time budgets |
+| **Skillify & Resolve** | Repeated work lost as one-offs; cluttered, duplicated skill libraries |
 
-## The Five Principles in Detail
+## The Six Principles in Detail
 
 ### 1. Think Before Coding
 
@@ -52,6 +53,8 @@ Combat the tendency toward overengineering:
 - No "flexibility" or "configurability" that wasn't requested
 - No error handling for impossible scenarios
 - If 200 lines could be 50, rewrite it
+
+**Never simplify away:** validation at trust boundaries, error handling that prevents data loss, security, accessibility, a runnable check for non-trivial logic, or anything explicitly requested. "Minimum code" means fewer lines, not fewer safety guards.
 
 **The test:** Would a senior engineer say this is overcomplicated? If yes, simplify.
 
@@ -115,6 +118,37 @@ Within the scope the user actually asked for (see Simplicity First), pick the op
 
 Speed is rarely the right axis to optimize on. If the proper version genuinely would take days, say so explicitly and let the user decide — don't silently downgrade to the shortcut.
 
+When a shortcut genuinely is the right call, don't leave it silent: mark it inline with its ceiling and upgrade trigger — `// shortcut: global lock; per-account locks if throughput matters`. A named ceiling can be found and revisited; an unmarked one silently rots into permanent debt.
+
+The governing question behind this principle — and behind every decision an agent makes — is: **whatever is scalable, long term, and cannot be done in a more efficient way.**
+
+### 6. Skillify & Resolve
+
+**Turn repeated work into skills. Keep one DRY, MECE resolver.**
+
+The compounding move from the YC conversation with Pete Koomen & Andrej Karpathy: a one-off you did well is wasted unless you capture it. When you finish something non-trivial worth repeating:
+
+- **Skillify it** — write the procedure as a named, parameterized skill (inputs as parameters, not hardcoded values), not a transcript.
+- **Register it in the resolver** — the index your agent reads (`AGENTS.md`, a skills list, a tool registry): `name` + one-line "use when" + a link to the entry point. A skill no one can find doesn't exist.
+
+Then keep the library clean against two tests:
+
+- **DRY** — one job, one skill. Ten skills that do the same thing is worse than one skill with a parameter.
+- **MECE** — *mutually exclusive* (given a task, exactly one skill is the obvious choice) and *collectively exhaustive* (every skill is reachable from the index; no orphans, no gaps).
+
+This is how a "shared organizational brain" forms: the resolver is only as valuable as it is clean, so prune and merge as it grows.
+
+## Skills: Skillify, DRY & MECE Resolvers
+
+The principle above ships as two runnable meta-skills in [`skills/`](./skills) — the actual artifacts, not just prose:
+
+| Skill | What it does |
+|-------|--------------|
+| [`skillify`](./skills/skillify/SKILL.md) | Capture what you just did as a reusable, parameterized skill, then register it in the resolver. |
+| [`check-resolvable`](./skills/check-resolvable/SKILL.md) | Audit the whole library so it stays DRY and MECE — no duplicates, no overlaps, no gaps. |
+
+They're standard [Claude Code Agent Skills](https://code.claude.com/docs/en/skills) (portable to Cursor, Codex, OpenClaw). Install and usage: [`skills/README.md`](./skills/README.md).
+
 ## Install
 
 **Option A: New project**
@@ -172,7 +206,7 @@ The goal is reducing costly mistakes on non-trivial work, not slowing down simpl
 
 ## Credits
 
-Sections 1–4 adapted from [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills), inspired by [Andrej Karpathy's writing on LLM coding pitfalls](https://x.com/karpathy/status/2015883857489522876). Section 5 added by Clawnify.
+Sections 1–4 adapted from [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills), inspired by [Andrej Karpathy's writing on LLM coding pitfalls](https://x.com/karpathy/status/2015883857489522876). Section 5 added by Clawnify. Section 6 and the `skillify` / `check-resolvable` skills added by Clawnify, derived from the YC conversation with Pete Koomen & Andrej Karpathy on building a "shared organizational brain." The §2 safety-guardrail and §5 shortcut-marker refinements were sharpened by studying [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail), a benchmarked minimalism skill in the same spirit.
 
 ## License
 
