@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "andrej-karpathy-skills",
+  "description": "Karpathy-inspired coding-agent guidelines, the skillify / check-resolvable meta-skills, and the /scalable decision test.",
+  "owner": {
+    "name": "Clawnify",
+    "url": "https://github.com/clawnify"
+  },
+  "plugins": [
+    {
+      "name": "andrej-karpathy-skills",
+      "description": "skillify + check-resolvable skills and the /scalable command. Pair with the npx installer for the always-on guidelines.",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+name: Sync check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      # Fail if any harness rule copy drifted from CLAUDE.md (the single source).
+      - run: node scripts/build-rules.js --check
+      # Smoke-test the installer: it must list agents and dry-run without crashing.
+      - run: node bin/install.js --list
+      - run: node bin/install.js --all --dry-run

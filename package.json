@@ -1,0 +1,39 @@
+{
+  "name": "andrej-karpathy-skills",
+  "version": "0.1.0",
+  "description": "Karpathy-inspired coding-agent guidelines + skillify / check-resolvable skills + the /scalable decision test, installable across every AI coding agent.",
+  "license": "MIT",
+  "homepage": "https://github.com/clawnify/andrej-karpathy-skills",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clawnify/andrej-karpathy-skills.git"
+  },
+  "bugs": {
+    "url": "https://github.com/clawnify/andrej-karpathy-skills/issues"
+  },
+  "bin": {
+    "andrej-karpathy-skills": "./bin/install.js",
+    "karpathy-skills": "./bin/install.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "node scripts/build-rules.js",
+    "check-sync": "node scripts/build-rules.js --check"
+  },
+  "files": [
+    "bin/",
+    "scripts/",
+    "skills/",
+    "commands/",
+    "CLAUDE.md",
+    "AGENTS.md",
+    "GEMINI.md",
+    ".cursor/",
+    ".windsurf/",
+    ".clinerules/",
+    ".github/copilot-instructions.md",
+    "LICENSE"
+  ]
+}

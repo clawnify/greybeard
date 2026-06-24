@@ -2,7 +2,7 @@
 
 > Built and maintained by [Clawnify](https://clawnify.com) — a managed platform that provisions AI agents with WhatsApp / Telegram / Email and browser capabilities for non-technical users.
 
-A single `CLAUDE.md` file to improve AI coding-agent behavior, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls, plus three sections we added for the AI-assisted-coding era. Ships alongside two runnable [meta-skills](#skills-skillify-dry--mece-resolvers) for the compounding loop Karpathy describes.
+A single `CLAUDE.md` file to improve AI coding-agent behavior, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls, plus three sections we added for the AI-assisted-coding era. Ships with two runnable [meta-skills](#skills-skillify-dry--mece-resolvers), the [`/scalable`](#the-scalable-command) decision command, and a [one-command installer](#install) that fans it all out to every AI coding agent you use.
 
 ## The Problems
 
@@ -177,20 +177,40 @@ Then `/scalable` (tests the current direction) or `/scalable <a specific decisio
 
 ## Install
 
-**Option A: New project**
+**One command — every agent on your machine:**
+
+```bash
+npx andrej-karpathy-skills
+```
+
+It detects the AI coding agents you actually use and installs the right files for each: the seven guidelines into the rule file each one reads (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `.cursor/rules/`, `.windsurf/rules/`, `.clinerules/`, `.github/copilot-instructions.md`), plus the `skillify` / `check-resolvable` skills and the `/scalable` command for Claude Code and OpenClaw. Shared files are edited between markers, so re-running is a safe no-op and your own content is preserved.
+
+```bash
+npx andrej-karpathy-skills --list        # show detected agents
+npx andrej-karpathy-skills --all         # install for all agents, detected or not
+npx andrej-karpathy-skills --only cursor # just one (repeatable)
+npx andrej-karpathy-skills --dry-run     # preview without writing
+npx andrej-karpathy-skills --uninstall   # remove what it added
+```
+
+Supported: **Claude Code, Cursor, Windsurf, Cline, GitHub Copilot, Codex, Gemini CLI, OpenClaw** — and any agent that reads `CLAUDE.md` / `AGENTS.md`.
+
+**Claude Code plugin marketplace** (the skills + `/scalable`):
+
+```
+/plugin marketplace add clawnify/andrej-karpathy-skills
+/plugin install andrej-karpathy-skills
+```
+
+**Manual** (just the guidelines, one file — no Node):
 
 ```bash
 curl -o CLAUDE.md https://raw.githubusercontent.com/clawnify/andrej-karpathy-skills/main/CLAUDE.md
-```
-
-**Option B: Append to an existing `CLAUDE.md` / `AGENTS.md`**
-
-```bash
-echo "" >> CLAUDE.md
+# …or append to an existing CLAUDE.md / AGENTS.md:
 curl https://raw.githubusercontent.com/clawnify/andrej-karpathy-skills/main/CLAUDE.md >> CLAUDE.md
 ```
 
-Works as-is with Claude Code, Cursor, Codex, and any other agent that reads `CLAUDE.md` / `AGENTS.md` / equivalent.
+> The per-agent rule files are generated from `CLAUDE.md` (the single source) by `scripts/build-rules.js`. Contributors: edit `CLAUDE.md`, run `npm run build`, commit. CI (`npm run check-sync`) fails if a copy drifts.
 
 ## Key Insight
 
