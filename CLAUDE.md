@@ -98,6 +98,19 @@ Before adding, check the resolver against two tests:
 
 Ten skills that do the same thing is worse than one skill with a parameter. The resolver is only as valuable as it is clean — prune and merge as it grows.
 
+## 7. Ground in Reality, Don't Recall
+
+**Training data is stale and lossy. Verify against the real source before you act.**
+
+Your priors are a starting hypothesis, not the answer. The most expensive mistakes come from confidently building on a remembered API, an assumed schema, or how a system "usually" works.
+
+- **Research outside your training data — and match the source to the question.** Look things up rather than recall them; your cutoff has passed, assume details have moved.
+  - For **facts** — library APIs, versions, config schemas, current behavior, prices — prefer primary sources: official docs, the actual source code, specs, release notes, vendor pages. Random blogs, forum answers, and SEO content are often outdated or wrong; when sources conflict, trust the primary one. Don't present recalled specifics as fact.
+  - For **design and infra decisions** — an architecture, a tradeoff, how to build something — study prior art: how established services and competitors solved the same problem is real signal. Here engineering blogs, postmortems, conference talks, and case studies are legitimate and valuable. Weigh how others did it in the wild, then decide for *this* system.
+- **Read this codebase, don't infer it.** Before editing, read the actual code, types, and tests the change touches, and trace the real flow end to end. How it works *here* beats how it works *in general*.
+- **Map before you move.** For non-trivial work, get the overview first: where this lives, what calls it and what it calls, the data and infrastructure boundaries it crosses. A change that's locally correct but wrong about the architecture is a new bug.
+- **When you can't verify, say so.** Flag it as an assumption and state how you'd confirm — never launder a guess into a claim.
+
 ---
 
-**These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, fewer "we'll fix it later" shortcuts, clarifying questions come before implementation rather than after mistakes, and repeated work compounds into reusable skills in a clean resolver.
+**These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, fewer "we'll fix it later" shortcuts, clarifying questions come before implementation rather than after mistakes, repeated work compounds into reusable skills in a clean resolver, and claims are grounded in verified sources and the real codebase rather than recalled from memory.

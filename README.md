@@ -2,7 +2,7 @@
 
 > Built and maintained by [Clawnify](https://clawnify.com) — a managed platform that provisions AI agents with WhatsApp / Telegram / Email and browser capabilities for non-technical users.
 
-A single `CLAUDE.md` file to improve AI coding-agent behavior, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls, plus two sections we added for the AI-assisted-coding era. Ships alongside two runnable [meta-skills](#skills-skillify-dry--mece-resolvers) for the compounding loop Karpathy describes.
+A single `CLAUDE.md` file to improve AI coding-agent behavior, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls, plus three sections we added for the AI-assisted-coding era. Ships alongside two runnable [meta-skills](#skills-skillify-dry--mece-resolvers) for the compounding loop Karpathy describes.
 
 ## The Problems
 
@@ -18,7 +18,7 @@ Plus one of our own: agents reach for shortcuts ("we don't have time", "we'll fi
 
 ## The Solution
 
-Six principles in one file that directly address these issues:
+Seven principles in one file that directly address these issues:
 
 | Principle | Addresses |
 |-----------|-----------|
@@ -28,8 +28,9 @@ Six principles in one file that directly address these issues:
 | **Goal-Driven Execution** | Leverage through verifiable success criteria |
 | **Recalibrate Time Estimates** | Quality downgrades justified by stale time budgets |
 | **Skillify & Resolve** | Repeated work lost as one-offs; cluttered, duplicated skill libraries |
+| **Ground in Reality** | Stale recalled APIs, assumed schemas, guessing how the code works |
 
-## The Six Principles in Detail
+## The Seven Principles in Detail
 
 ### 1. Think Before Coding
 
@@ -137,6 +138,19 @@ Then keep the library clean against two tests:
 - **MECE** — *mutually exclusive* (given a task, exactly one skill is the obvious choice) and *collectively exhaustive* (every skill is reachable from the index; no orphans, no gaps).
 
 This is how a "shared organizational brain" forms: the resolver is only as valuable as it is clean, so prune and merge as it grows.
+
+### 7. Ground in Reality, Don't Recall
+
+**Training data is stale and lossy. Verify against the real source before you act.**
+
+Your priors are a starting hypothesis, not the answer. The most expensive mistakes come from confidently building on a remembered API, an assumed schema, or how a system "usually" works.
+
+- **Research outside your training data — and match the source to the question.** Look it up rather than recall it (read the docs, fetch the page, run `--help`); your cutoff has passed, assume details have moved.
+  - For **facts** (an API, a version, a schema, current behavior): prefer primary sources — official docs, the actual source code, specs, release notes, vendor pages — over random blogs, forum answers, and SEO content. When sources conflict, trust the primary one.
+  - For **design and infra decisions** (an architecture, a tradeoff): study prior art — how established services and competitors solved the same problem is real signal, and here engineering blogs, postmortems, talks, and case studies are legitimate and valuable. Weigh how others did it, then decide for *this* system.
+- **Read this codebase, don't infer it.** Before editing, read the actual code, types, and tests the change touches, and trace the real flow end to end. How it works *here* beats how it works *in general*.
+- **Map before you move.** For non-trivial work, get the overview first: where this lives, what calls it and what it calls, the data and infrastructure boundaries it crosses. A change that's locally correct but wrong about the architecture is a new bug.
+- **When you can't verify, say so** — flag it as an assumption and state how you'd confirm, never launder a guess into a claim.
 
 ## Skills: Skillify, DRY & MECE Resolvers
 
