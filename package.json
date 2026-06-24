@@ -23,6 +23,7 @@
     "check-sync": "node scripts/build-rules.js --check"
   },
   "files": [
+    "assets/",
     "bin/",
     "scripts/",
     "skills/",

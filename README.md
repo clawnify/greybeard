@@ -1,4 +1,13 @@
-# Karpathy-Inspired Coding-Agent Guidelines
+<p align="center">
+  <img src="assets/greybeard.png" width="320" alt="The Greybeard — Principal Engineer">
+</p>
+
+<h1 align="center">Karpathy-Inspired Coding-Agent Guidelines</h1>
+
+<p align="center">
+  <em>Make your agent code like the senior who's been paged at 3am for every shortcut you're about to take.</em><br>
+  <strong>"Did you check, or did you guess?"</strong>
+</p>
 
 > Built and maintained by [Clawnify](https://clawnify.com) — a managed platform that provisions AI agents with WhatsApp / Telegram / Email and browser capabilities for non-technical users.
 
