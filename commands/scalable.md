@@ -12,6 +12,7 @@ The governing question for the choice: **whatever is scalable, long term, and ca
 - For this **infra/tech decision**, research how established services and competitors solved the same problem — engineering blogs, postmortems, talks, and case studies are fair game here. Prior art is signal.
 - Verify any **fact** you lean on — an API, a limit, a price, current behavior — against a primary source (official docs, the actual source code), not a remembered version or a random blog.
 - Read the actual code and architecture this touches before ruling — locally correct but architecturally wrong is still wrong.
+- **Look down the stack, not just sideways.** Before designing any new state — config keys, DB columns, env vars, endpoints, files — search the framework / platform / library you build on (and the rest of this repo) for a native primitive that already models this concern. The leanest correct option is frequently one that already exists one layer down; reinventing what the host exposes is the most common efficiency miss. Verify it against the dependency's actual source, not its docs alone.
 
 **Define the three pillars for *this* decision — if they're not already clear.** Before judging, make each concrete for the case at hand:
 
@@ -25,7 +26,7 @@ Then judge the approach against the **three pillars** — name specifics, not ab
 
 - **Scalable** — does it hold at 100× the load / data / users / surface area? Name the first thing that breaks.
 - **Long term** — six months from now, is this a foundation or a wound? What does it cost to live with, or to undo?
-- **Efficient** — is this already the leanest *correct* way, or is there a genuinely more efficient one (fewer moving parts, less code, less to maintain)? "More efficient" never means removing a safety guard.
+- **Efficient** — is this the leanest *correct* way? The leanest option is often **reusing an existing primitive** (host platform, upstream dependency, or elsewhere in this repo) rather than any new construct you write — so confirm none exists before designing one. Then: fewer moving parts, less code, less to maintain. "More efficient" never means removing a safety guard.
 
 **Plus any pillars this project adds.** The three above always stand; if the company/codebase has its own vision pillars (e.g. Portability, Privacy, Offline-first), find them in its `CLAUDE.md` / `AGENTS.md` / vision docs and judge against those too — they extend the three, never replace them.
 
