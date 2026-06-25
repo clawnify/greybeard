@@ -13,7 +13,15 @@ The governing question for the choice: **whatever is scalable, long term, and ca
 - Verify any **fact** you lean on — an API, a limit, a price, current behavior — against a primary source (official docs, the actual source code), not a remembered version or a random blog.
 - Read the actual code and architecture this touches before ruling — locally correct but architecturally wrong is still wrong.
 
-Then judge it concretely — name specifics, not abstractions — on three axes:
+**Define the three pillars for *this* decision — if they're not already clear.** Before judging, make each concrete for the case at hand:
+
+- what actually grows (what "scalable" means here — the load / data / users / surface that increases),
+- the horizon that matters (a throwaway, or the load-bearing path you'll live with for months?),
+- what efficiency is measured in (and what it would be traded against).
+
+Pillars you can't name, you can't judge against — so name them first.
+
+Then judge the approach against the **three pillars** — name specifics, not abstractions:
 
 - **Scalable** — does it hold at 100× the load / data / users / surface area? Name the first thing that breaks.
 - **Long term** — six months from now, is this a foundation or a wound? What does it cost to live with, or to undo?

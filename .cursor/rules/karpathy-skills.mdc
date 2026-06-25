@@ -83,10 +83,12 @@ When you catch yourself thinking:
 
 Stop. That estimate is anchored to a pre-AI baseline. What used to be a two-week project for a senior engineer frequently fits in a single session with an AI agent. The "no time" argument is usually wrong, and "later" rarely arrives.
 
-Within the scope the user actually asked for (see §2), the question to ask for **every** decision is: *whatever is scalable, long term, and cannot be done in a more efficient way.* Concretely, pick the option that's best on:
-- **Scalability** — does this hold at 100× the load / data / users?
-- **Long term** — six months from now, is this a foundation or a wound?
-- **Security** — would you ship this if your name were on the incident report?
+Within the scope the user actually asked for (see §2), the question to ask for **every** decision is: *whatever is scalable, long term, and cannot be done in a more efficient way.* Those are the **three pillars** — judge every option against them:
+- **Scalability** — does this hold at 100× the load / data / users / surface area? Name the first thing that breaks.
+- **Long term** — six months from now, is this a foundation or a wound? What does it cost to live with, or to undo?
+- **Efficiency** — is this already the leanest *correct* way, or is there a genuinely more efficient one (fewer moving parts, less code, less to maintain)?
+
+**If the three pillars aren't clear for the decision at hand, define them first.** Make each concrete for *this* case: name the dimension that actually grows (what "scalable" means here), the horizon that matters (a throwaway script vs the load-bearing path), and what efficiency is measured in (and what it'd be traded against). Pillars you can't name, you can't judge against. Security, correctness, and data-safety are non-negotiable guardrails on all three — never trade them away for speed.
 
 Speed is rarely the right axis to optimize on. If the proper version genuinely would take days, say so explicitly and let the user decide — don't silently downgrade to the shortcut.
 
