@@ -10,7 +10,7 @@ The governing question for the choice: **whatever is scalable, long term, and ca
 **Ground it first — don't judge from priors.** Your training data is stale; verify before ruling.
 
 - For this **infra/tech decision**, research how established services and competitors solved the same problem — engineering blogs, postmortems, talks, and case studies are fair game here. Prior art is signal.
-- Verify any **fact** you lean on — an API, a limit, a price, current behavior — against a primary source (official docs, the actual source code), not a remembered version or a random blog.
+- Verify any **fact** you lean on — an API, a limit, a price, current behavior — against a primary source (official docs, the actual source code), not a remembered version or a random blog. When a docs-retrieval tool is available — Context7, a `find-docs` skill, an MCP docs server — use it to pull the latest docs instead of recalling them.
 - Read the actual code and architecture this touches before ruling — locally correct but architecturally wrong is still wrong.
 - **Look down the stack, not just sideways.** Before designing any new state — config keys, DB columns, env vars, endpoints, files — search the framework / platform / library you build on (and the rest of this repo) for a native primitive that already models this concern. The leanest correct option is frequently one that already exists one layer down; reinventing what the host exposes is the most common efficiency miss. Verify it against the dependency's actual source, not its docs alone.
 
