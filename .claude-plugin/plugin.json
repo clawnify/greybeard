@@ -4,5 +4,6 @@
   "author": {
     "name": "Clawnify",
     "url": "https://github.com/clawnify"
-  }
+  },
+  "hooks": "./hooks/hooks.json"
 }

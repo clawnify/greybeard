@@ -212,12 +212,14 @@ npx @clawnify/greybeard --uninstall   # remove what it added
 
 Supported: **Claude Code, Cursor, Windsurf, Cline, GitHub Copilot, Codex, Gemini CLI, OpenClaw** — and any agent that reads `CLAUDE.md` / `AGENTS.md`.
 
-**Claude Code plugin marketplace** (the skills + `/scalable`):
+**Claude Code plugin marketplace** (the skills + `/scalable` + always-on guidelines):
 
 ```
 /plugin marketplace add clawnify/greybeard
 /plugin install greybeard
 ```
+
+The plugin ships a `SessionStart` / `SubagentStart` hook that injects the seven guidelines into every session automatically — installing the plugin is enough, no per-project `npx` run needed. It's careful not to double up: if the guidelines are already in your `~/.claude/CLAUDE.md` or a project's `CLAUDE.md` / `AGENTS.md` (via the npx installer or a hand-merge), the hook detects them and stays silent. To turn injection off without uninstalling, set `GREYBEARD=off` in your environment.
 
 **Manual** (just the guidelines, one file — no Node):
 
