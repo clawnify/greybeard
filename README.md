@@ -19,7 +19,7 @@
 
 > Built and maintained by [Clawnify](https://clawnify.com) — a managed platform that provisions AI agents with WhatsApp / Telegram / Email and browser capabilities for non-technical users.
 
-A single `CLAUDE.md` file to improve AI coding-agent behavior, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls, plus three sections we added for the AI-assisted-coding era. Ships with two runnable [meta-skills](#skills-skillify-dry--mece-resolvers), the [`/scalable`](#the-scalable-command) decision command, and a [one-command installer](#install) that fans it all out to every AI coding agent you use.
+A single `CLAUDE.md` file to improve AI coding-agent behavior, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls, plus three sections we added for the AI-assisted-coding era. Ships with two runnable [meta-skills](#skills-skillify-dry--mece-resolvers), the [`/scalable`](#the-scalable-command) decision command, the [`/sidenote`](#the-sidenote-command) park-a-thought command, and a [one-command installer](#install) that fans it all out to every AI coding agent you use.
 
 ## The Problems
 
@@ -191,6 +191,22 @@ cp commands/scalable.md ~/.claude/commands/      # personal, all projects
 ```
 
 Then `/scalable` (tests the current direction) or `/scalable <a specific decision>`.
+
+## The `/sidenote` command
+
+You're mid-way through a big task and a passing thought hits — *"the retry logic probably has the same bug", "remind me to check the pricing later"* — something you don't want to forget. Drop it in the chat as-is and the agent reads it as a new request: it rushes the current task to "get to" your note, and the big task pays for it.
+
+[`commands/sidenote.md`](./commands/sidenote.md) reframes that thought as a **parked later-task, not a now-task**. The agent logs it verbatim to `.claude/sidenotes.md` (durable across compaction and session end), gives a one-line ack, and resumes *exactly* where it was — same scope, same pace, no cutting corners to reach the note. A bare `/sidenote` flushes the list back to you.
+
+```bash
+mkdir -p ~/.claude/commands
+cp commands/sidenote.md ~/.claude/commands/      # personal, all projects
+# or: .claude/commands/  for one project
+```
+
+Then `/sidenote <the thought>` to park one, or `/sidenote` to see what's parked. The notes land in `.claude/sidenotes.md` — add it to `.gitignore` if you'd rather not track it.
+
+> **No slash commands?** For agents that read a rule file but have no `/` commands (Cursor, Codex, Copilot…), the same contract works as a plain-text convention: prefix the message with `SIDENOTE:` and the agent parks it instead of acting. Add one line to your rule file so it's honored reliably — see [`commands/sidenote.md`](./commands/sidenote.md) for the exact contract.
 
 ## Install
 
