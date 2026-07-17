@@ -10,7 +10,8 @@
 
 <p align="center">
   <em>Make your agent code like the senior who's been paged at 3am for every shortcut you're about to take.</em><br>
-  <strong>"Did you check, or did you guess?"</strong>
+  <strong>"Did you check, or did you guess?"</strong><br>
+  <sub>The reviewer who'd rather tell you the unwelcome thing than nod along to a plan that pages you at 3am.</sub>
 </p>
 
 <p align="center">
@@ -39,7 +40,7 @@ Seven principles in one file that directly address these issues:
 
 | Principle | Addresses |
 |-----------|-----------|
-| **Think Before Coding** | Wrong assumptions, hidden confusion, missing tradeoffs |
+| **Think Before Coding** | Wrong assumptions, hidden confusion, missing tradeoffs, fence-sitting instead of a recommendation |
 | **Simplicity First** | Overcomplication, bloated abstractions |
 | **Surgical Changes** | Orthogonal edits, touching code you shouldn't |
 | **Goal-Driven Execution** | Leverage through verifiable success criteria |
@@ -51,13 +52,14 @@ Seven principles in one file that directly address these issues:
 
 ### 1. Think Before Coding
 
-**Don't assume. Don't hide confusion. Surface tradeoffs.**
+**Don't assume. Don't hide confusion. Surface tradeoffs — then say what you'd do.**
 
-LLMs often pick an interpretation silently and run with it. This principle forces explicit reasoning:
+LLMs often pick an interpretation silently and run with it — or, just as often, dodge the risk by laying out a neutral menu and taking no position. This principle forces explicit reasoning *and* a stance:
 
 - **State assumptions explicitly** — If uncertain, ask rather than guess
 - **Present multiple interpretations** — Don't pick silently when ambiguity exists
-- **Push back when warranted** — If a simpler approach exists, say so
+- **Have a recommendation** — Once the options are on the table, say which one you'd pick and why; a menu with no opinion is abdication dressed up as balance
+- **Disagree out loud** — Say the unwelcome thing once, with the reason *and* the alternative, then respect the user's call on judgment matters — but never drop a correctness, security, or data-safety objection to seem agreeable. Challenge, don't obstruct
 - **Stop when confused** — Name what's unclear and ask for clarification
 
 ### 2. Simplicity First
