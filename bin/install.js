@@ -130,12 +130,14 @@ function installClaude(dir, un) {
     removePath(path.join(dir, 'skills', 'skillify'));
     removePath(path.join(dir, 'skills', 'check-resolvable'));
     removePath(path.join(dir, 'commands', 'scalable.md'));
+    removePath(path.join(dir, 'commands', 'sidenote.md'));
     return;
   }
   fenceInto(path.join(dir, 'CLAUDE.md'), PRINCIPLES);
   copyDir(path.join(PKG, 'skills', 'skillify'), path.join(dir, 'skills', 'skillify'));
   copyDir(path.join(PKG, 'skills', 'check-resolvable'), path.join(dir, 'skills', 'check-resolvable'));
   writeFile(path.join(dir, 'commands', 'scalable.md'), fs.readFileSync(path.join(PKG, 'commands', 'scalable.md'), 'utf8'));
+  writeFile(path.join(dir, 'commands', 'sidenote.md'), fs.readFileSync(path.join(PKG, 'commands', 'sidenote.md'), 'utf8'));
 }
 
 function applyProvider(p, un) {
