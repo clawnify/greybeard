@@ -24,6 +24,10 @@ const CWD = process.cwd();
 const MARK_START = '<!-- karpathy-skills:start -->';
 const MARK_END = '<!-- karpathy-skills:end -->';
 const BLOCK_RE = new RegExp(`\\n*${MARK_START}[\\s\\S]*?${MARK_END}\\n?`);
+// Verbatim heading that marks a file as already carrying the guidelines even
+// without our fence markers — i.e. someone hand-merged them. Same string the
+// activate hook keys on; keep in sync with hooks/greybeard-activate.js.
+const HANDMERGE_MARK = '## 1. Think Before Coding';
 
 // ── Provider matrix ─────────────────────────────────────────────────────────
 // detect: paths that, if present, mean the agent is in use (~ = home, ./ = cwd).
@@ -76,10 +80,13 @@ const C = process.stdout.isTTY && !process.env.NO_COLOR;
 const dim = (s) => (C ? `\x1b[2m${s}\x1b[0m` : s);
 const green = (s) => (C ? `\x1b[32m${s}\x1b[0m` : s);
 const bold = (s) => (C ? `\x1b[1m${s}\x1b[0m` : s);
+const yellow = (s) => (C ? `\x1b[33m${s}\x1b[0m` : s);
 
 // ── FS helpers (dry-run aware) ──────────────────────────────────────────────
 let DRY = false;
+let FORCE = false;
 const actions = [];
+const warnings = [];
 function writeFile(dest, content) {
   if (fs.existsSync(dest) && fs.readFileSync(dest, 'utf8') === content) return false;
   if (!DRY) { fs.mkdirSync(path.dirname(dest), { recursive: true }); fs.writeFileSync(dest, content); }
@@ -92,6 +99,14 @@ function fenceInto(dest, payload) {
   // Strip any existing block, then re-append. Deterministic regardless of prior
   // state, so re-running is a true no-op and other content is preserved.
   const without = cur.replace(BLOCK_RE, '').trimEnd();
+  // Duplication guard: if the guidelines are hand-merged into this file (verbatim
+  // heading, no fence markers), appending our block would create a second copy.
+  // Skip and warn unless --force. The heading only lives inside our own block in
+  // a managed file, so stripping it above keeps normal re-runs from tripping this.
+  if (!FORCE && without.includes(HANDMERGE_MARK)) {
+    warnings.push(`${rel(dest)} already has the guidelines hand-merged (no ${MARK_START} markers) — skipped to avoid a duplicate. Remove the hand-merged copy so the installer can manage it, or re-run with --force to append anyway.`);
+    return false;
+  }
   const next = without ? `${without}\n\n${block}` : block;
   return writeFile(dest, next);
 }
@@ -166,6 +181,7 @@ function main() {
   const o = parseArgs(process.argv.slice(2));
   if (o.help) return printHelp();
   DRY = o.dryRun;
+  FORCE = o.force;
 
   if (o.list) {
     console.log(bold('Supported agents:'));
@@ -186,7 +202,12 @@ function main() {
   console.log(bold(`${o.uninstall ? 'Uninstalling' : 'Installing'} for: ${chosen.map((p) => p.name).join(', ')}`));
   for (const p of chosen) applyProvider(p, o.uninstall);
 
-  if (!actions.length) { console.log(green('Already up to date — nothing to change.')); return; }
+  for (const w of warnings) console.log(yellow('  ! ') + w);
+
+  if (!actions.length) {
+    if (!warnings.length) console.log(green('Already up to date — nothing to change.'));
+    return;
+  }
   for (const a of actions) console.log('  ' + a);
   console.log(o.dryRun ? dim('\nDry run — no files written.') : green(`\nDone (${actions.length} change${actions.length > 1 ? 's' : ''}).`));
 }
@@ -201,6 +222,7 @@ Flags:
   --all          install for every supported agent, detected or not
   --only <id>    install only for the given agent (repeatable)
   --uninstall    remove what this installer added
+  --force        append the guidelines even if a hand-merged copy is detected
   --dry-run      show what would change without writing
   --list         list supported agents and detection status
   --help         this message
