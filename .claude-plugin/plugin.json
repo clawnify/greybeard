@@ -1,6 +1,6 @@
 {
   "name": "greybeard",
-  "description": "Karpathy-inspired coding-agent skills: skillify (capture repeated work), check-resolvable (keep skills DRY + MECE), and the /scalable decision test.",
+  "description": "Karpathy-inspired coding-agent skills: skillify (capture repeated work), check-resolvable (keep skills DRY + MECE), and the /pressure-test decision test.",
   "author": {
     "name": "Clawnify",
     "url": "https://github.com/clawnify"

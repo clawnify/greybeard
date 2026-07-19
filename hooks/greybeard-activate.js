@@ -4,7 +4,7 @@
 // greybeard — SessionStart / SubagentStart hook.
 //
 // Injects the three-pillars decision test (scalable / long term / efficient —
-// the core of the /scalable command) as hidden context so installing the
+// the core of the /pressure-test command) as hidden context so installing the
 // plugin is enough — no per-project `npx @clawnify/greybeard` needed.
 // Skips injection when the full guidelines are already loaded another way:
 //
@@ -48,7 +48,7 @@ function alreadyLoaded(cwd) {
   return false;
 }
 
-// The three pillars, condensed from commands/scalable.md — the single
+// The three pillars, condensed from commands/pressure-test.md — the single
 // question that governs every decision. Keep wording in sync with that file.
 const PILLARS = `GREYBEARD ACTIVE — judge every decision against the three pillars: whatever is **scalable**, **long term**, and **cannot be done in a more efficient way**.
 
@@ -62,7 +62,7 @@ If the pillars aren't concrete for the decision at hand, define them first: name
 
 "No time to do it properly" is usually a stale pre-AI estimate; the proper version often fits this session. If it genuinely doesn't, say so and let the user decide — don't silently downgrade to the shortcut. When a shortcut is right, mark it inline with its ceiling and upgrade trigger.
 
-For contested decisions, run the /scalable command (greybeard:scalable) to pressure-test the approach.`;
+For contested decisions, run the /pressure-test command (greybeard:pressure-test) to pressure-test the approach.`;
 
 function main() {
   if ((process.env.GREYBEARD || '').trim().toLowerCase() === 'off') return;
