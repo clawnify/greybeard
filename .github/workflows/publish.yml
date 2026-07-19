@@ -1,0 +1,31 @@
+name: Publish to npm
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write   # required for --provenance (OIDC)
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      # Zero runtime deps + no lockfile, so no `npm ci`. Regenerate the per-agent
+      # rule files, then fail if any copy drifted from CLAUDE.md (the single source).
+      - run: npm run build
+      - run: node scripts/build-rules.js --check
+
+      # Smoke-test the installer before shipping it.
+      - run: node bin/install.js --list
+
+      - run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
