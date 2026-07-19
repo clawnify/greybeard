@@ -20,7 +20,7 @@
 
 > Built and maintained by [Clawnify](https://clawnify.com) — a managed platform that provisions AI agents with WhatsApp / Telegram / Email and browser capabilities for non-technical users.
 
-A single `CLAUDE.md` file to improve AI coding-agent behavior, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls, plus three sections we added for the AI-assisted-coding era. Ships with two runnable [meta-skills](#skills-skillify-dry--mece-resolvers), the [`/scalable`](#the-scalable-command) decision command, the [`/sidenote`](#the-sidenote-command) park-a-thought command, and a [one-command installer](#install) that fans it all out to every AI coding agent you use.
+A single `CLAUDE.md` file to improve AI coding-agent behavior, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls, plus three sections we added for the AI-assisted-coding era. Ships with two runnable [meta-skills](#skills-skillify-dry--mece-resolvers), its two main commands — [`/pressure-test`](#the-pressure-test-command), the decision test, and [`/sidenote`](#the-sidenote-command), park-a-thought — and a [one-command installer](#install) that fans it all out to every AI coding agent you use.
 
 ## The Problems
 
@@ -182,17 +182,21 @@ The principle above ships as two runnable meta-skills in [`skills/`](./skills) �
 
 They're standard [Claude Code Agent Skills](https://code.claude.com/docs/en/skills) (portable to Cursor, Codex, OpenClaw). Install and usage: [`skills/README.md`](./skills/README.md).
 
-## The `/scalable` command
+## The two main commands
 
-[`commands/scalable.md`](./commands/scalable.md) is a Claude Code slash command that runs the §5 decision test on demand: pressure-test the approach on the table against **scalable / long-term / efficient** — *whatever is scalable, long term, and cannot be done in a more efficient way* — and get one decisive recommendation, with stale-time-budget shortcuts called out.
+Greybeard's two flagship slash commands are **`/pressure-test`** and **`/sidenote`** — one guards the *quality* of a decision, the other guards your *focus* while you make it. The skills and always-on guidelines back them up, but these are the two you'll reach for by hand.
+
+## The `/pressure-test` command
+
+[`commands/pressure-test.md`](./commands/pressure-test.md) is a Claude Code slash command that runs the §5 decision test on demand: pressure-test the approach on the table against **scalable / long-term / efficient** — *whatever is scalable, long term, and cannot be done in a more efficient way* — and get one decisive recommendation, with stale-time-budget shortcuts called out.
 
 ```bash
 mkdir -p ~/.claude/commands
-cp commands/scalable.md ~/.claude/commands/      # personal, all projects
+cp commands/pressure-test.md ~/.claude/commands/      # personal, all projects
 # or: .claude/commands/  for one project
 ```
 
-Then `/scalable` (tests the current direction) or `/scalable <a specific decision>`.
+Then `/pressure-test` (tests the current direction) or `/pressure-test <a specific decision>`.
 
 ## The `/sidenote` command
 
@@ -218,7 +222,7 @@ Then `/sidenote <the thought>` to park one, or `/sidenote` to see what's parked.
 npx @clawnify/greybeard
 ```
 
-It detects the AI coding agents you actually use and installs the right files for each: the seven guidelines into the rule file each one reads (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `.cursor/rules/`, `.windsurf/rules/`, `.clinerules/`, `.github/copilot-instructions.md`), plus the `skillify` / `check-resolvable` skills and the `/scalable` command for Claude Code and OpenClaw. Shared files are edited between markers, so re-running is a safe no-op and your own content is preserved.
+It detects the AI coding agents you actually use and installs the right files for each: the seven guidelines into the rule file each one reads (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `.cursor/rules/`, `.windsurf/rules/`, `.clinerules/`, `.github/copilot-instructions.md`), plus the `skillify` / `check-resolvable` skills and the `/pressure-test` command for Claude Code and OpenClaw. Shared files are edited between markers, so re-running is a safe no-op and your own content is preserved.
 
 ```bash
 npx @clawnify/greybeard --list        # show detected agents
@@ -230,14 +234,14 @@ npx @clawnify/greybeard --uninstall   # remove what it added
 
 Supported: **Claude Code, Cursor, Windsurf, Cline, GitHub Copilot, Codex, Gemini CLI, OpenClaw** — and any agent that reads `CLAUDE.md` / `AGENTS.md`.
 
-**Claude Code plugin marketplace** (the skills + `/scalable` + always-on guidelines):
+**Claude Code plugin marketplace** (the skills + `/pressure-test` + always-on guidelines):
 
 ```
 /plugin marketplace add clawnify/greybeard
 /plugin install greybeard
 ```
 
-The plugin ships a `SessionStart` / `SubagentStart` hook that injects the three-pillars decision test (scalable / long term / efficient — the core of `/scalable`) into every session automatically — installing the plugin is enough, no per-project `npx` run needed. It's careful not to double up: if the full guidelines are already in your `~/.claude/CLAUDE.md` or a project's `CLAUDE.md` / `AGENTS.md` (via the npx installer or a hand-merge), the hook detects them and stays silent. To turn injection off without uninstalling, set `GREYBEARD=off` in your environment.
+The plugin ships a `SessionStart` / `SubagentStart` hook that injects the three-pillars decision test (scalable / long term / efficient — the core of `/pressure-test`) into every session automatically — installing the plugin is enough, no per-project `npx` run needed. It's careful not to double up: if the full guidelines are already in your `~/.claude/CLAUDE.md` or a project's `CLAUDE.md` / `AGENTS.md` (via the npx installer or a hand-merge), the hook detects them and stays silent. To turn injection off without uninstalling, set `GREYBEARD=off` in your environment.
 
 **Manual** (just the guidelines, one file — no Node):
 

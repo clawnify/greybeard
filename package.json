@@ -1,7 +1,7 @@
 {
   "name": "@clawnify/greybeard",
   "version": "0.1.0",
-  "description": "Greybeard — Karpathy-inspired guardrails that make your AI coding agent behave like a principled senior engineer. Guidelines + skillify / check-resolvable skills + the /scalable decision test, installable across every AI coding agent.",
+  "description": "Greybeard — Karpathy-inspired guardrails that make your AI coding agent behave like a principled senior engineer. Guidelines + skillify / check-resolvable skills + the /pressure-test decision test, installable across every AI coding agent.",
   "license": "MIT",
   "homepage": "https://github.com/clawnify/greybeard",
   "repository": {
