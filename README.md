@@ -272,7 +272,7 @@ curl https://raw.githubusercontent.com/clawnify/greybeard/main/CLAUDE.md >> CLAU
 
 > The per-agent rule files are generated from `CLAUDE.md` (the single source) by `scripts/build-rules.js`. Contributors: edit `CLAUDE.md`, run `npm run build`, commit. CI (`npm run check-sync`) fails if a copy drifts.
 
-> **Releasing** (maintainers): bump `version` in `package.json`, then cut a GitHub Release tagged `v<version>` (`gh release create v0.2.0 --generate-notes`). The [`Publish to npm`](.github/workflows/publish-npm.yml) workflow publishes `@clawnify/greybeard` on release, using the `NPM_TOKEN` repo secret. The first publish can be bootstrapped before the workflow is on `main` with `gh workflow run publish-npm.yml --ref <branch>`.
+> **Releasing** (maintainers): bump `version` in `package.json`, then cut a GitHub Release tagged `v<version>` (`gh release create v0.2.0 --generate-notes`). The [`Publish to npm`](.github/workflows/publish.yml) workflow publishes `@clawnify/greybeard` on release (with npm provenance), using the `NPM_TOKEN` repo secret.
 
 ## Key Insight
 
