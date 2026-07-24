@@ -251,7 +251,28 @@ curl -o CLAUDE.md https://raw.githubusercontent.com/clawnify/greybeard/main/CLAU
 curl https://raw.githubusercontent.com/clawnify/greybeard/main/CLAUDE.md >> CLAUDE.md
 ```
 
+**Updating** to the latest release:
+
+- **npx installer** — re-run it. `@latest` beats npx's own cache so you actually get the newest version, and the marker-based edits make it a safe no-op if nothing changed:
+
+  ```bash
+  npx @clawnify/greybeard@latest
+  ```
+
+- **Claude Code plugin** — there's no `/plugin update`; refresh the marketplace, then reinstall (third-party marketplaces don't auto-update by default). You can flip on auto-update in `/plugin` → **Marketplaces**:
+
+  ```
+  /plugin marketplace update greybeard
+  /plugin uninstall greybeard@greybeard
+  /plugin install greybeard@greybeard
+  /reload-plugins
+  ```
+
+- **Manual (curl)** — re-run the `-o` form; it overwrites `CLAUDE.md` with the latest (the `>>` append form would duplicate).
+
 > The per-agent rule files are generated from `CLAUDE.md` (the single source) by `scripts/build-rules.js`. Contributors: edit `CLAUDE.md`, run `npm run build`, commit. CI (`npm run check-sync`) fails if a copy drifts.
+
+> **Releasing** (maintainers): bump `version` in `package.json`, then cut a GitHub Release tagged `v<version>` (`gh release create v0.2.0 --generate-notes`). The [`Publish to npm`](.github/workflows/publish.yml) workflow publishes `@clawnify/greybeard` on release (with npm provenance), using the `NPM_TOKEN` repo secret.
 
 ## Key Insight
 
