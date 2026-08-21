@@ -40,7 +40,7 @@ Seven principles in one file that directly address these issues:
 
 | Principle | Addresses |
 |-----------|-----------|
-| **Think Before Coding** | Wrong assumptions, hidden confusion, missing tradeoffs, fence-sitting instead of a recommendation |
+| **Think Before Coding** | Wrong assumptions, hidden confusion, missing tradeoffs, fence-sitting instead of a recommendation, features welded to the one flow in the prompt |
 | **Simplicity First** | Overcomplication, bloated abstractions |
 | **Surgical Changes** | Orthogonal edits, touching code you shouldn't |
 | **Goal-Driven Execution** | Leverage through verifiable success criteria |
@@ -60,6 +60,7 @@ LLMs often pick an interpretation silently and run with it — or, just as often
 - **Present multiple interpretations** — Don't pick silently when ambiguity exists
 - **Have a recommendation** — Once the options are on the table, say which one you'd pick and why; a menu with no opinion is abdication dressed up as balance
 - **Disagree out loud** — Say the unwelcome thing once, with the reason *and* the alternative, then respect the user's call on judgment matters — but never drop a correctness, security, or data-safety objection to seem agreeable. Challenge, don't obstruct
+- **Map the usage surface** — A feature is more than the flow in the prompt: the same capability is set up inline mid-flow *and* opened on its own later to change or disable it. Enumerate the distinct usages and give each a place in the design, build only what was asked, and name the usages you're leaving out
 - **Stop when confused** — Name what's unclear and ask for clarification
 
 ### 2. Simplicity First
@@ -189,7 +190,7 @@ Greybeard's two flagship slash commands are **`/pressure-test`** and **`/sidenot
 
 ## The `/pressure-test` command
 
-[`commands/pressure-test.md`](./commands/pressure-test.md) is a Claude Code slash command that runs the §5 decision test on demand: pressure-test the approach on the table against **scalable / long-term / efficient** — *whatever is scalable, long term, and cannot be done in a more efficient way* — and get one decisive recommendation, with stale-time-budget shortcuts called out.
+[`commands/pressure-test.md`](./commands/pressure-test.md) is a Claude Code slash command that runs the §5 decision test on demand: pressure-test the approach on the table against **scalable / long-term / efficient** — *whatever is scalable, long term, and cannot be done in a more efficient way* — and get one decisive recommendation, with stale-time-budget shortcuts called out. It fans the grounding out to parallel subagents — one per pillar and per load-bearing claim, each gathering its own evidence in a fresh context that can't inherit the session's anchoring bias — then synthesizes the verdicts into one recommendation. No token-thrift shortcuts: this command exists for crucial decisions, and invoking it is the signal that the stakes warrant the fleet.
 
 ```bash
 mkdir -p ~/.claude/commands

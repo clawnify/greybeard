@@ -21,6 +21,8 @@ Before implementing:
 
 **Ambiguity check — confirm before you build.** Before committing to anything non-trivial, prove you read it the same way the user meant it: give **three concrete examples of what the result will do — including at least one edge case** — and confirm they're right. Worked examples expose a misread that abstract restating hides; an example that forks into "well, it depends" is a question to resolve now, not a guess to make. Cheap to confirm up front, expensive to discover after you've built the wrong thing.
 
+**Map the usage surface — a feature is more than the flow in the prompt.** The same capability is reached from different entry points, at different moments, by different actors: configured inline mid-flow *and* opened on its own later just to change or turn it off; triggered by the user *and* by the system. An agent turn is framed around one focused task, so the feature quietly gets welded to the single flow the request described — an auto-topup setting built as if it only exists inside the "choose topup amount" flow, when updating those settings is its own session with its own entry point. Before building, enumerate the distinct usages and give each a place in the design (the data model and the seams, not necessarily the code); then build only what was asked (§2) and **name the usages you're leaving out** — a variation surfaced is a decision on the table, a variation missed is a discovery in production.
+
 ## 2. Simplicity First
 
 **Minimum code that solves the problem. Nothing speculative.**
