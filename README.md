@@ -190,7 +190,7 @@ Greybeard's two flagship slash commands are **`/pressure-test`** and **`/sidenot
 
 ## The `/pressure-test` command
 
-[`commands/pressure-test.md`](./commands/pressure-test.md) is a Claude Code slash command that runs the §5 decision test on demand: pressure-test the approach on the table against **scalable / long-term / efficient** — *whatever is scalable, long term, and cannot be done in a more efficient way* — and get one decisive recommendation, with stale-time-budget shortcuts called out. It fans the grounding out to parallel subagents — one per pillar and per load-bearing claim, each gathering its own evidence in a fresh context that can't inherit the session's anchoring bias — then synthesizes the verdicts into one recommendation. No token-thrift shortcuts: this command exists for crucial decisions, and invoking it is the signal that the stakes warrant the fleet.
+[`commands/pressure-test.md`](./commands/pressure-test.md) is a Claude Code slash command that runs the §5 decision test on demand: pressure-test the approach on the table against **scalable / long-term / efficient** — *whatever is scalable, long term, and cannot be done in a more efficient way* — and get one decisive recommendation, with stale-time-budget shortcuts called out. The main context runs the test and owns the ruling; subagents are scoped instruments, spawned only where a check benefits from being outside the session — challenging a belief the conversation already holds (a fresh context can't inherit its anchoring), or online research and docs verification that parallelize while the main agent keeps reasoning. Never the test wholesale: a main agent that only orchestrates stops being the main brain.
 
 ```bash
 mkdir -p ~/.claude/commands
