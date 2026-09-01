@@ -1,0 +1,28 @@
+#!/bin/sh
+# Reject AI-authorship attribution in commit messages.
+#
+# Coding agents (Claude Code and friends) are instructed by their own harness to
+# append a `Co-Authored-By: Claude ...` trailer and a "Generated with" line. This
+# project's history is a public artifact — keep the tooling out of it. The hook
+# catches every agent session, which a convention in CLAUDE.md alone does not.
+#
+# Wire it up once per clone:  git config core.hooksPath .githooks
+
+msg_file="$1"
+
+# Strip comment lines so a commented-out example can't trip the check.
+body=$(grep -v '^#' "$msg_file")
+
+if printf '%s' "$body" | grep -qiE '^[[:space:]]*co-authored-by:[[:space:]]*claude'; then
+  echo "commit-msg: refusing 'Co-Authored-By: Claude' trailer." >&2
+  echo "  Remove the trailer and commit again." >&2
+  exit 1
+fi
+
+if printf '%s' "$body" | grep -qiE 'generated with \[?claude code'; then
+  echo "commit-msg: refusing 'Generated with Claude Code' attribution." >&2
+  echo "  Remove the line and commit again." >&2
+  exit 1
+fi
+
+exit 0

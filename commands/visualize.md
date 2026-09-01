@@ -16,7 +16,9 @@ So, before drawing:
 
 ### Forms
 
-Use one, sometimes a few, rarely all. Match the form to the question being asked.
+Use one, sometimes a few, rarely all. Match the form to the question being asked — **and to the surface it lands on.**
+
+**Check the surface before you pick.** A terminal has no diagram renderer: a `mermaid` fence there prints its own source code, which is strictly worse than the plain-text form it replaced. So in a terminal (Claude Code, a shell, a plain log) every form below must be *text that is already the picture* — trees, indentation, box-drawing characters. Reach for Mermaid only when the output lands somewhere that actually renders it: a published artifact, a `.md` file read on GitHub, the desktop or web app. When in doubt, assume it won't render and draw it as text.
 
 - **Logic or an algorithm** — pseudocode:
 
@@ -56,7 +58,17 @@ Use one, sometimes a few, rarely all. Match the form to the question being asked
   └── transport/      # sends API requests
   ```
 
-- **Component interaction, control flow, data flow** — Mermaid:
+- **Component interaction, or data flow between processes** — a text sequence, drawn with box-drawing characters. This is the terminal-safe form:
+
+  ```text
+  form.tsx:88              daemon.ts:210
+       │                         │
+       │── send expanded prompt ▶│
+       │                         │── spawn agent   agent.ts:41
+       │◀──── stream result ─────│
+  ```
+
+  Same shape as Mermaid, no renderer required. **Only** if the output lands on a surface that renders diagrams (a published artifact, a `.md` on GitHub) is the `mermaid` fence the better call:
 
   ```mermaid
   sequenceDiagram
