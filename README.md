@@ -20,7 +20,7 @@
 
 > Built and maintained by [Clawnify](https://clawnify.com) — a managed platform that provisions AI agents with WhatsApp / Telegram / Email and browser capabilities for non-technical users.
 
-A single `CLAUDE.md` file to improve AI coding-agent behavior, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls, plus three sections we added for the AI-assisted-coding era. Ships with two runnable [meta-skills](#skills-skillify-dry--mece-resolvers), its two main commands — [`/pressure-test`](#the-pressure-test-command), the decision test, and [`/sidenote`](#the-sidenote-command), park-a-thought — and a [one-command installer](#install) that fans it all out to every AI coding agent you use.
+A single `CLAUDE.md` file to improve AI coding-agent behavior, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls, plus three sections we added for the AI-assisted-coding era. Ships with two runnable [meta-skills](#skills-skillify-dry--mece-resolvers), its three commands — [`/pressure-test`](#the-pressure-test-command), the decision test, [`/sidenote`](#the-sidenote-command), park-a-thought, and [`/visualize`](#the-visualize-command), draw-the-real-shape — and a [one-command installer](#install) that fans it all out to every AI coding agent you use.
 
 ## The Problems
 
@@ -186,9 +186,9 @@ The principle above ships as two runnable meta-skills in [`skills/`](./skills) �
 
 They're standard [Claude Code Agent Skills](https://code.claude.com/docs/en/skills) (portable to Cursor, Codex, OpenClaw). Install and usage: [`skills/README.md`](./skills/README.md).
 
-## The two main commands
+## The three commands
 
-Greybeard's two flagship slash commands are **`/pressure-test`** and **`/sidenote`** — one guards the *quality* of a decision, the other guards your *focus* while you make it. The skills and always-on guidelines back them up, but these are the two you'll reach for by hand.
+Greybeard's slash commands are **`/pressure-test`**, **`/sidenote`** and **`/visualize`** — one guards the *quality* of a decision, one guards your *focus* while you make it, and one makes sure what you're shown is the code that's actually there. The skills and always-on guidelines back them up, but these are the three you'll reach for by hand.
 
 ## The `/pressure-test` command
 
@@ -218,6 +218,20 @@ Then `/sidenote <the thought>` to park one, or `/sidenote` to see what's parked.
 
 > **No slash commands?** For agents that read a rule file but have no `/` commands (Cursor, Codex, Copilot…), the same contract works as a plain-text convention: prefix the message with `SIDENOTE:` and the agent parks it instead of acting. Add one line to your rule file so it's honored reliably — see [`commands/sidenote.md`](./commands/sidenote.md) for the exact contract.
 
+## The `/visualize` command
+
+Ask an agent to explain how something works and you get paragraphs. Ask it to *draw* the thing and you get comprehension — a call tree, a component tree, a sequence diagram. But a diagram is also the easiest place in the world to launder a guess: prose hedges out loud (*"it probably calls…"*), while boxes and arrows just assert. An architecture diagram drawn from priors reads as **verified**, and people build on it for weeks.
+
+[`commands/visualize.md`](./commands/visualize.md) is the §7 rule applied to pictures. It gives the agent a menu of visual forms — pseudocode, call tree, component tree, file tree, Mermaid, shaped `diff`s, or one focused HTML file — and tells it to pick the *smallest* one that makes the point. Then the Greybeard part: **read the code before drawing it** (the actual files, this session — if the diagram has five nodes, you opened five things), **anchor every node** to a real `file:line`, and **tag anything unread as ASSUMED** with the check that would settle it. A diagram that's 90% verified and 10% quietly invented is 100% untrustworthy.
+
+```bash
+mkdir -p ~/.claude/commands
+cp commands/visualize.md ~/.claude/commands/      # personal, all projects
+# or: .claude/commands/  for one project
+```
+
+Then `/visualize <what to draw>`, or a bare `/visualize` to draw whatever's currently on the table.
+
 ## Install
 
 **One command — every agent on your machine:**
@@ -226,7 +240,7 @@ Then `/sidenote <the thought>` to park one, or `/sidenote` to see what's parked.
 npx @clawnify/greybeard
 ```
 
-It detects the AI coding agents you actually use and installs the right files for each: the seven guidelines into the rule file each one reads (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `.cursor/rules/`, `.windsurf/rules/`, `.clinerules/`, `.github/copilot-instructions.md`), plus the `skillify` / `check-resolvable` skills and the `/pressure-test` command for Claude Code and OpenClaw. Shared files are edited between markers, so re-running is a safe no-op and your own content is preserved.
+It detects the AI coding agents you actually use and installs the right files for each: the seven guidelines into the rule file each one reads (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `.cursor/rules/`, `.windsurf/rules/`, `.clinerules/`, `.github/copilot-instructions.md`), plus the `skillify` / `check-resolvable` skills for Claude Code and OpenClaw, and the `/pressure-test`, `/sidenote` and `/visualize` commands for Claude Code. Shared files are edited between markers, so re-running is a safe no-op and your own content is preserved.
 
 ```bash
 npx @clawnify/greybeard --list        # show detected agents
@@ -238,7 +252,7 @@ npx @clawnify/greybeard --uninstall   # remove what it added
 
 Supported: **Claude Code, Cursor, Windsurf, Cline, GitHub Copilot, Codex, Gemini CLI, OpenClaw** — and any agent that reads `CLAUDE.md` / `AGENTS.md`.
 
-**Claude Code plugin marketplace** (the skills + `/pressure-test` + always-on guidelines):
+**Claude Code plugin marketplace** (the skills + the three commands + always-on guidelines):
 
 ```
 /plugin marketplace add clawnify/greybeard
@@ -318,7 +332,7 @@ The goal is reducing costly mistakes on non-trivial work, not slowing down simpl
 
 ## Credits
 
-Sections 1–4 adapted from [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills), inspired by [Andrej Karpathy's writing on LLM coding pitfalls](https://x.com/karpathy/status/2015883857489522876). Section 5 added by Clawnify. Section 6 and the `skillify` / `check-resolvable` skills added by Clawnify, derived from the YC conversation with Pete Koomen & Andrej Karpathy on building a "shared organizational brain." The §2 safety-guardrail and §5 shortcut-marker refinements were sharpened by studying [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail), a benchmarked minimalism skill in the same spirit.
+Sections 1–4 adapted from [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills), inspired by [Andrej Karpathy's writing on LLM coding pitfalls](https://x.com/karpathy/status/2015883857489522876). Section 5 added by Clawnify. Section 6 and the `skillify` / `check-resolvable` skills added by Clawnify, derived from the YC conversation with Pete Koomen & Andrej Karpathy on building a "shared organizational brain." The §2 safety-guardrail and §5 shortcut-marker refinements were sharpened by studying [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail), a benchmarked minimalism skill in the same spirit. The `/visualize` command's form menu is adapted from [dmmulroy's `show-me` skill](https://github.com/dmmulroy/.dotfiles/blob/main/home/.agents/skills/show-me/SKILL.md); the grounding rules on top of it are ours.
 
 ## License
 
