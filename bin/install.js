@@ -4,8 +4,9 @@
 // greybeard — cross-platform installer.
 //
 // Detects the AI coding agents on your machine / in this project and installs
-// the Karpathy-inspired guidelines (+ Claude Code skills and the /pressure-test
-// command) into each one's rule location. Pure Node stdlib, zero runtime deps.
+// the Karpathy-inspired guidelines (+ Claude Code skills and the /pressure-test,
+// /sidenote and /visualize commands) into each one's rule location. Pure Node
+// stdlib, zero runtime deps.
 //
 //   npx @clawnify/greybeard            # install for every detected agent
 //   npx @clawnify/greybeard --all      # install for all agents, detected or not
@@ -147,6 +148,7 @@ function installClaude(dir, un) {
     removePath(path.join(dir, 'commands', 'scalable.md')); // legacy name, pre-rename
     removePath(path.join(dir, 'commands', 'pressure-test.md'));
     removePath(path.join(dir, 'commands', 'sidenote.md'));
+    removePath(path.join(dir, 'commands', 'visualize.md'));
     return;
   }
   fenceInto(path.join(dir, 'CLAUDE.md'), PRINCIPLES);
@@ -155,6 +157,7 @@ function installClaude(dir, un) {
   removePath(path.join(dir, 'commands', 'scalable.md')); // clean up the pre-rename command from prior installs
   writeFile(path.join(dir, 'commands', 'pressure-test.md'), fs.readFileSync(path.join(PKG, 'commands', 'pressure-test.md'), 'utf8'));
   writeFile(path.join(dir, 'commands', 'sidenote.md'), fs.readFileSync(path.join(PKG, 'commands', 'sidenote.md'), 'utf8'));
+  writeFile(path.join(dir, 'commands', 'visualize.md'), fs.readFileSync(path.join(PKG, 'commands', 'visualize.md'), 'utf8'));
 }
 
 function applyProvider(p, un) {
