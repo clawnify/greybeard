@@ -13,7 +13,9 @@ Park this thought — **$ARGUMENTS** — as a sidenote. A sidenote is a *later-t
 
 **Persist it so it survives this session** (context gets compacted; memory doesn't count as "logged"):
 
-1. Append one entry to `.claude/sidenotes.md` at the project root — create the file (and `.claude/`) if missing.
+1. Append one entry to the **parking file** — create it if missing. Where it lives:
+   - **Inside a git repo:** `$(git rev-parse --path-format=absolute --git-common-dir)/info/sidenotes.md`. That is git's own home for local, never-committed, per-repo data — so no ignore rule is needed, `git add -A` can never sweep it into a PR, one file is shared by every worktree of the repo, and it survives the worktree it was parked from being removed.
+   - **Otherwise:** `.claude/sidenotes.md` at the project root (create `.claude/` if missing).
 2. Format — an open checkbox, the verbatim thought, then a one-line **anchor** so the note still makes sense when another session or agent reads it cold (the verbatim thought alone is full of "this / here / it" that dangles without the moment that produced it):
 
    ```
@@ -24,6 +26,6 @@ Park this thought — **$ARGUMENTS** — as a sidenote. A sidenote is a *later-t
    - **Thought — verbatim.** Don't paraphrase or "improve" it; capture what was said.
    - **Anchor — coordinates you already hold, not a research task.** Fill it only from what's already in front of you: the task in progress, the file/area currently in focus, the current branch and short SHA (already in your session's git context). **Do not open files, grep, or investigate the note's subject to complete it** — that would break the park contract. Any field you don't already know, omit. The anchor records where you were standing; it never sends you looking.
 
-Then: **one-line acknowledgement** (e.g. `Parked in .claude/sidenotes.md — continuing.`) and **resume exactly where you left off**, as if the note had never arrived.
+Then: **one-line acknowledgement** (e.g. `Parked in the sidenotes file — continuing.`) and **resume exactly where you left off**, as if the note had never arrived.
 
-**If `$ARGUMENTS` is empty** (a bare `/sidenote`), there's nothing to park — treat it as a *flush*: read `.claude/sidenotes.md` and list the **open** entries back to me so I can decide what to pick up. Open means *not checked off* — every entry except the ones marked done (`- [x]`), so older bullets without a checkbox still count. Change nothing, act on nothing, then resume. (Checking an item off to `- [x]` happens when it's actually handled — not part of parking or flushing.)
+**If `$ARGUMENTS` is empty** (a bare `/sidenote`), there's nothing to park — treat it as a *flush*: read the parking file (same location as above; if a legacy `.claude/sidenotes.md` also exists at the project root, read that too and say so, so its entries can be moved) and list the **open** entries back to me so I can decide what to pick up. Open means *not checked off* — every entry except the ones marked done (`- [x]`), so older bullets without a checkbox still count. Change nothing, act on nothing, then resume. (Checking an item off to `- [x]` happens when it's actually handled — not part of parking or flushing.)
