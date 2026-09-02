@@ -12,7 +12,7 @@ So, before drawing:
 - **Read the code you're about to draw.** The actual files, in this repo, this session — not the neighbors, not the pattern this framework "usually" follows, not a version of it you remember. If the diagram has five nodes, you opened five things.
 - **Anchor every node.** Participants, boxes, tree entries, and call-stack frames name a real `path/to/file.ts:42`. A node you can't anchor is a node you didn't verify.
 - **Tag what you didn't open — `ASSUMED`.** Sometimes a branch matters to the shape but you haven't read it (an upstream SDK, a path that's out of scope). Draw it, mark it `ASSUMED`, and say what would confirm it. Never quietly complete the picture; a diagram that's 90% verified and 10% invented, unmarked, is 100% untrustworthy.
-- **Draw the current shape before the proposed one.** If the point is a change, the "before" side comes from the code as it is today, not as you'd have written it.
+- **Draw the current shape before the proposed one — and trace it with the real input.** If the point is a change, the "before" side comes from the code as it is today, not as you'd have written it. An anchor proves the node exists; it does not prove the arrow fires. Before drawing a current shape for input X, carry X itself through every lookup, guard, and branch on the path — the registry has that key, the config applies to it, the early return isn't taken. If the trace dead-ends, the dead end *is* the current shape: draw the failure, not the flow you expected. And a node whose annotation contradicts the diagram's own conclusion is a node you haven't reconciled — resolve it or prune it before shipping the picture.
 
 ### Forms
 
