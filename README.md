@@ -206,7 +206,7 @@ Then `/pressure-test` (tests the current direction) or `/pressure-test <a specif
 
 You're mid-way through a big task and a passing thought hits — *"the retry logic probably has the same bug", "remind me to check the pricing later"* — something you don't want to forget. Drop it in the chat as-is and the agent reads it as a new request: it rushes the current task to "get to" your note, and the big task pays for it.
 
-[`commands/sidenote.md`](./commands/sidenote.md) reframes that thought as a **parked later-task, not a now-task**. The agent logs it verbatim to `.claude/sidenotes.md` (durable across compaction and session end) — with a one-line anchor (task in progress, the file it points at, branch) so it still makes sense when another session or agent reads it cold — gives a one-line ack, and resumes *exactly* where it was — same scope, same pace, no cutting corners to reach the note. A bare `/sidenote` flushes the open list back to you.
+[`commands/sidenote.md`](./commands/sidenote.md) reframes that thought as a **parked later-task, not a now-task**. The agent logs it verbatim to a parking file (durable across compaction, session end, and worktree removal) — with a one-line anchor (task in progress, the file it points at, branch) so it still makes sense when another session or agent reads it cold — gives a one-line ack, and resumes *exactly* where it was — same scope, same pace, no cutting corners to reach the note. A bare `/sidenote` flushes the open list back to you.
 
 ```bash
 mkdir -p ~/.claude/commands
@@ -214,7 +214,7 @@ cp commands/sidenote.md ~/.claude/commands/      # personal, all projects
 # or: .claude/commands/  for one project
 ```
 
-Then `/sidenote <the thought>` to park one, or `/sidenote` to see what's parked. The notes land in `.claude/sidenotes.md`, a personal parking file kept out of git (this repo's `.gitignore` already excludes it) — so it's per-checkout scratch, not shared history.
+Then `/sidenote <the thought>` to park one, or `/sidenote` to see what's parked. The notes land in `$(git rev-parse --path-format=absolute --git-common-dir)/info/sidenotes.md` — inside `.git/`, so they are personal per-repo scratch that no ignore rule has to protect and no `git add -A` can sweep into a PR, shared across all worktrees of the repo. Outside a git repo the fallback is `.claude/sidenotes.md` at the project root.
 
 > **No slash commands?** For agents that read a rule file but have no `/` commands (Cursor, Codex, Copilot…), the same contract works as a plain-text convention: prefix the message with `SIDENOTE:` and the agent parks it instead of acting. Add one line to your rule file so it's honored reliably — see [`commands/sidenote.md`](./commands/sidenote.md) for the exact contract.
 
