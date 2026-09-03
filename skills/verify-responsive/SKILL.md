@@ -1,6 +1,6 @@
 ---
 name: verify-responsive
-description: Verify a responsive UI by rendering the real page at real viewport widths in fixed-width iframes, then driving and asserting it from the parent. Use when checking a mobile or tablet layout, a breakpoint, or small-screen-only behavior — especially when a window-resize tool won't give you a mobile viewport.
+description: The default way to check a responsive UI — render the real page at real viewport widths in fixed-width iframes, then drive and assert it from the parent. Use whenever you need to see or verify a layout at a given width: a mobile or tablet breakpoint, or small-screen-only behavior. Reach for it first, ahead of resizing a window.
 ---
 
 # Verify Responsive
@@ -9,7 +9,15 @@ description: Verify a responsive UI by rendering the real page at real viewport 
 
 The tool is one throwaway HTML file: fixed-width `<iframe>`s pointed at your running app. An iframe is a nested browsing context, so **its viewport is the iframe box** — width and height media queries, container queries, and `vw`/`vh` all resolve to the size you set. Two frames side by side puts both breakpoints in a single screenshot.
 
-Reach for this when a browser-automation "resize window" call doesn't actually change the viewport the page sees. That failure is quiet and expensive: the screenshot comes back at the old width, the desktop branch renders, and you conclude the mobile layout is fine without ever having rendered it.
+## Why not just resize the window
+
+Don't — go straight to the harness. Resizing buys exactly one thing, a narrower viewport, which is the same thing the iframe gives you. The iframe then gives you three more:
+
+- **Both breakpoints in one screenshot**, side by side, rather than one width at a time.
+- **A frame you can script.** The parent clicks into it, reads state back, and asserts `innerWidth` and `matchMedia(...)` *from inside* the frame. A resized window can only be photographed.
+- **No dependency on the resize having worked.** Browser-automation resize calls can quietly fail to change the layout viewport the page actually sees: the screenshot comes back at the old width, the desktop branch renders, and you sign off on a mobile layout you never rendered.
+
+The tool that genuinely beats this harness is **device emulation**, not window resizing — see [what this does not give you](#what-this-does-not-give-you).
 
 ## Inputs
 
