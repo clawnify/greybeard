@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "greybeard",
-  "description": "Greybeard \u2014 Karpathy-inspired coding-agent guidelines, the skillify / check-resolvable meta-skills, and the /pressure-test, /sidenote and /visualize commands.",
+  "description": "Greybeard \u2014 Karpathy-inspired coding-agent guidelines, the skillify / check-resolvable meta-skills, the verify-responsive practice skill, and the /pressure-test, /sidenote and /visualize commands.",
   "owner": {
     "name": "Clawnify",
     "url": "https://github.com/clawnify"
@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "greybeard",
-      "description": "skillify + check-resolvable skills and the /pressure-test, /sidenote and /visualize commands. Pair with the npx installer for the always-on guidelines.",
+      "description": "skillify + check-resolvable + verify-responsive skills and the /pressure-test, /sidenote and /visualize commands. Pair with the npx installer for the always-on guidelines.",
       "source": "./",
       "category": "productivity"
     }

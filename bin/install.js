@@ -138,13 +138,14 @@ function rel(p) { return p.startsWith(HOME) ? '~' + p.slice(HOME.length) : path.
 
 // The canonical principles payload for fenced installs = the generated AGENTS.md.
 const PRINCIPLES = fs.readFileSync(path.join(PKG, 'AGENTS.md'), 'utf8');
+// Skill directories shipped to every provider that reads skills. Add a new one here only.
+const SKILLS = ['skillify', 'check-resolvable', 'verify-responsive'];
 
 // ── Per-provider install / uninstall ────────────────────────────────────────
 function installClaude(dir, un) {
   if (un) {
     removeFenceFrom(path.join(dir, 'CLAUDE.md'));
-    removePath(path.join(dir, 'skills', 'skillify'));
-    removePath(path.join(dir, 'skills', 'check-resolvable'));
+    for (const s of SKILLS) removePath(path.join(dir, 'skills', s));
     removePath(path.join(dir, 'commands', 'scalable.md')); // legacy name, pre-rename
     removePath(path.join(dir, 'commands', 'pressure-test.md'));
     removePath(path.join(dir, 'commands', 'sidenote.md'));
@@ -152,8 +153,7 @@ function installClaude(dir, un) {
     return;
   }
   fenceInto(path.join(dir, 'CLAUDE.md'), PRINCIPLES);
-  copyDir(path.join(PKG, 'skills', 'skillify'), path.join(dir, 'skills', 'skillify'));
-  copyDir(path.join(PKG, 'skills', 'check-resolvable'), path.join(dir, 'skills', 'check-resolvable'));
+  for (const s of SKILLS) copyDir(path.join(PKG, 'skills', s), path.join(dir, 'skills', s));
   removePath(path.join(dir, 'commands', 'scalable.md')); // clean up the pre-rename command from prior installs
   writeFile(path.join(dir, 'commands', 'pressure-test.md'), fs.readFileSync(path.join(PKG, 'commands', 'pressure-test.md'), 'utf8'));
   writeFile(path.join(dir, 'commands', 'sidenote.md'), fs.readFileSync(path.join(PKG, 'commands', 'sidenote.md'), 'utf8'));
@@ -164,9 +164,8 @@ function applyProvider(p, un) {
   if (p.kind === 'claude') return installClaude(expand('~/.claude'), un);
   if (p.kind === 'openclaw') {
     const base = expand('~/.openclaw/workspace/skills');
-    if (un) { removePath(path.join(base, 'skillify')); removePath(path.join(base, 'check-resolvable')); return; }
-    copyDir(path.join(PKG, 'skills', 'skillify'), path.join(base, 'skillify'));
-    copyDir(path.join(PKG, 'skills', 'check-resolvable'), path.join(base, 'check-resolvable'));
+    if (un) { for (const s of SKILLS) removePath(path.join(base, s)); return; }
+    for (const s of SKILLS) copyDir(path.join(PKG, 'skills', s), path.join(base, s));
     return;
   }
   if (p.kind === 'file') {

@@ -1,11 +1,19 @@
 # Skills: Skillify, DRY & MECE Resolvers
 
-Two meta-skills that make a coding agent *compound* — turning repeated work into reusable skills, and keeping the skill library clean as it grows. Derived from the YC conversation with Pete Koomen & Andrej Karpathy on how AI-native organizations build a "shared organizational brain."
+Two **meta-skills** that make a coding agent *compound* — turning repeated work into reusable skills, and keeping the skill library clean as it grows — plus the **practice skills** they produce. The meta-skills are derived from the YC conversation with Pete Koomen & Andrej Karpathy on how AI-native organizations build a "shared organizational brain"; the practice skills are what came out of running `skillify` on our own work.
 
 | Skill | What it does |
 |-------|--------------|
 | [`skillify`](./skillify/SKILL.md) | Capture what you just did as a reusable, parameterized skill, then register it in the resolver. |
 | [`check-resolvable`](./check-resolvable/SKILL.md) | Audit the whole library so it stays **DRY** (no duplicates) and **MECE** (no overlaps, no gaps). |
+
+## Practice skills
+
+Procedures captured with `skillify`. Each one exists because reasoning about the answer kept being wrong and rendering it was cheap.
+
+| Skill | What it does |
+|-------|--------------|
+| [`verify-responsive`](./verify-responsive/SKILL.md) | Render the real page at real viewport widths in fixed-width iframes, then drive and assert it from the parent. |
 
 ## The decision test
 
@@ -34,14 +42,14 @@ These are standard [Claude Code Agent Skills](https://code.claude.com/docs/en/sk
 
 ```bash
 mkdir -p ~/.claude/skills
-cp -R skillify check-resolvable ~/.claude/skills/
+cp -R skillify check-resolvable verify-responsive ~/.claude/skills/
 ```
 
 **One project only:**
 
 ```bash
 mkdir -p .claude/skills
-cp -R skillify check-resolvable .claude/skills/
+cp -R skillify check-resolvable verify-responsive .claude/skills/
 ```
 
 Then add a one-line entry for each to your project's resolver (`AGENTS.md` / `CLAUDE.md`) so the agent — and your teammates — can find them. After that, just say *"skillify this"* when you finish something worth keeping.

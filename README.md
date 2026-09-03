@@ -20,7 +20,7 @@
 
 > Built and maintained by [Clawnify](https://clawnify.com) — a managed platform that provisions AI agents with WhatsApp / Telegram / Email and browser capabilities for non-technical users.
 
-A single `CLAUDE.md` file to improve AI coding-agent behavior, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls, plus three sections we added for the AI-assisted-coding era. Ships with two runnable [meta-skills](#skills-skillify-dry--mece-resolvers), its three commands — [`/pressure-test`](#the-pressure-test-command), the decision test, [`/sidenote`](#the-sidenote-command), park-a-thought, and [`/visualize`](#the-visualize-command), draw-the-real-shape — and a [one-command installer](#install) that fans it all out to every AI coding agent you use.
+A single `CLAUDE.md` file to improve AI coding-agent behavior, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls, plus three sections we added for the AI-assisted-coding era. Ships with three runnable [skills](#skills-skillify-dry--mece-resolvers), its three commands — [`/pressure-test`](#the-pressure-test-command), the decision test, [`/sidenote`](#the-sidenote-command), park-a-thought, and [`/visualize`](#the-visualize-command), draw-the-real-shape — and a [one-command installer](#install) that fans it all out to every AI coding agent you use.
 
 ## The Problems
 
@@ -184,6 +184,12 @@ The principle above ships as two runnable meta-skills in [`skills/`](./skills) �
 | [`skillify`](./skills/skillify/SKILL.md) | Capture what you just did as a reusable, parameterized skill, then register it in the resolver. |
 | [`check-resolvable`](./skills/check-resolvable/SKILL.md) | Audit the whole library so it stays DRY and MECE — no duplicates, no overlaps, no gaps. |
 
+And the **practice skills** those two produce — procedures captured with `skillify`, kept in the same index:
+
+| Skill | What it does |
+|-------|--------------|
+| [`verify-responsive`](./skills/verify-responsive/SKILL.md) | Render the real page at real viewport widths in fixed-width iframes, then drive and assert it from the parent. |
+
 They're standard [Claude Code Agent Skills](https://code.claude.com/docs/en/skills) (portable to Cursor, Codex, OpenClaw). Install and usage: [`skills/README.md`](./skills/README.md).
 
 ## The three commands
@@ -240,7 +246,7 @@ Then `/visualize <what to draw>`, or a bare `/visualize` to draw whatever's curr
 npx @clawnify/greybeard
 ```
 
-It detects the AI coding agents you actually use and installs the right files for each: the seven guidelines into the rule file each one reads (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `.cursor/rules/`, `.windsurf/rules/`, `.clinerules/`, `.github/copilot-instructions.md`), plus the `skillify` / `check-resolvable` skills for Claude Code and OpenClaw, and the `/pressure-test`, `/sidenote` and `/visualize` commands for Claude Code. Shared files are edited between markers, so re-running is a safe no-op and your own content is preserved.
+It detects the AI coding agents you actually use and installs the right files for each: the seven guidelines into the rule file each one reads (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `.cursor/rules/`, `.windsurf/rules/`, `.clinerules/`, `.github/copilot-instructions.md`), plus the `skillify` / `check-resolvable` / `verify-responsive` skills for Claude Code and OpenClaw, and the `/pressure-test`, `/sidenote` and `/visualize` commands for Claude Code. Shared files are edited between markers, so re-running is a safe no-op and your own content is preserved.
 
 ```bash
 npx @clawnify/greybeard --list        # show detected agents
