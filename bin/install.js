@@ -39,6 +39,7 @@ const HANDMERGE_MARK = '## 1. Think Before Coding';
 //   append   project: fence the principles into a shared file (idempotent)
 const PROVIDERS = [
   { id: 'claude',   name: 'Claude Code',    detect: ['~/.claude'],            kind: 'claude' },
+  { id: 'opencode', name: 'OpenCode',       detect: ['~/.config/opencode'],   kind: 'opencode' },
   { id: 'cursor',   name: 'Cursor',         detect: ['./.cursor'],            kind: 'file',   src: '.cursor/rules/karpathy-skills.mdc' },
   { id: 'windsurf', name: 'Windsurf',       detect: ['./.windsurf'],          kind: 'file',   src: '.windsurf/rules/karpathy-skills.md' },
   { id: 'cline',    name: 'Cline',          detect: ['./.clinerules'],        kind: 'file',   src: '.clinerules/karpathy-skills.md' },
@@ -142,6 +143,15 @@ const PRINCIPLES = fs.readFileSync(path.join(PKG, 'AGENTS.md'), 'utf8');
 const SKILLS = ['skillify', 'check-resolvable', 'verify-responsive'];
 
 // ── Per-provider install / uninstall ────────────────────────────────────────
+// The OpenCode plugin serves both `opencode` (V1) and `opencode2` (V2 beta):
+// both read global plugins from ~/.config/opencode/plugins/ and both expose
+// the experimental.chat.system.transform hook the plugin uses.
+function installOpencode(un) {
+  const dest = path.join(HOME, '.config', 'opencode', 'plugins', 'greybeard.js');
+  if (un) return removePath(dest);
+  return writeFile(dest, fs.readFileSync(path.join(PKG, 'hooks', 'greybeard-opencode.js'), 'utf8'));
+}
+
 function installClaude(dir, un) {
   if (un) {
     removeFenceFrom(path.join(dir, 'CLAUDE.md'));
@@ -162,6 +172,7 @@ function installClaude(dir, un) {
 
 function applyProvider(p, un) {
   if (p.kind === 'claude') return installClaude(expand('~/.claude'), un);
+  if (p.kind === 'opencode') return installOpencode(un);
   if (p.kind === 'openclaw') {
     const base = expand('~/.openclaw/workspace/skills');
     if (un) { for (const s of SKILLS) removePath(path.join(base, s)); return; }

@@ -246,7 +246,7 @@ Then `/visualize <what to draw>`, or a bare `/visualize` to draw whatever's curr
 npx @clawnify/greybeard
 ```
 
-It detects the AI coding agents you actually use and installs the right files for each: the seven guidelines into the rule file each one reads (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `.cursor/rules/`, `.windsurf/rules/`, `.clinerules/`, `.github/copilot-instructions.md`), plus the `skillify` / `check-resolvable` / `verify-responsive` skills for Claude Code and OpenClaw, and the `/pressure-test`, `/sidenote` and `/visualize` commands for Claude Code. Shared files are edited between markers, so re-running is a safe no-op and your own content is preserved.
+It detects the AI coding agents you actually use and installs the right files for each: the seven guidelines into the rule file each one reads (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `.cursor/rules/`, `.windsurf/rules/`, `.clinerules/`, `.github/copilot-instructions.md`), plus the `skillify` / `check-resolvable` / `verify-responsive` skills for Claude Code and OpenClaw, the `/pressure-test`, `/sidenote` and `/visualize` commands for Claude Code, and the always-on guidelines plugin for OpenCode. Shared files are edited between markers, so re-running is a safe no-op and your own content is preserved.
 
 ```bash
 npx @clawnify/greybeard --list        # show detected agents
@@ -256,7 +256,7 @@ npx @clawnify/greybeard --dry-run     # preview without writing
 npx @clawnify/greybeard --uninstall   # remove what it added
 ```
 
-Supported: **Claude Code, Cursor, Windsurf, Cline, GitHub Copilot, Codex, Gemini CLI, OpenClaw** — and any agent that reads `CLAUDE.md` / `AGENTS.md`.
+Supported: **Claude Code, OpenCode, Cursor, Windsurf, Cline, GitHub Copilot, Codex, Gemini CLI, OpenClaw** — and any agent that reads `CLAUDE.md` / `AGENTS.md`.
 
 **Claude Code plugin marketplace** (the skills + the three commands + always-on guidelines):
 
@@ -267,8 +267,9 @@ Supported: **Claude Code, Cursor, Windsurf, Cline, GitHub Copilot, Codex, Gemini
 
 The plugin ships a `SessionStart` / `SubagentStart` hook that injects the three-pillars decision test (scalable / long term / efficient — the core of `/pressure-test`) into every session automatically — installing the plugin is enough, no per-project `npx` run needed. It's careful not to double up: if the full guidelines are already in your `~/.claude/CLAUDE.md` or a project's `CLAUDE.md` / `AGENTS.md` (via the npx installer or a hand-merge), the hook detects them and stays silent. To turn injection off without uninstalling, set `GREYBEARD=off` in your environment.
 
-**Manual** (just the guidelines, one file — no Node):
+**OpenCode plugin** (always-on guidelines, same as the Claude Code plugin): the npx installer copies `hooks/greybeard-opencode.js` to `~/.config/opencode/plugins/greybeard.js`, where OpenCode loads it globally — every session gets the three-pillars decision test injected via the `experimental.chat.system.transform` hook. Works with both OpenCode V1 (`opencode`) and the V2 beta (`opencode2`), which share the plugin hook and the `~/.config/opencode/` location. Same guardrails as the Claude hook: if the guidelines are already in an ambient `AGENTS.md` (global or project), the plugin stays silent, and `GREYBEARD=off` turns injection off.
 
+**Manual** (just the guidelines, one file — no Node):
 ```bash
 curl -o CLAUDE.md https://raw.githubusercontent.com/clawnify/greybeard/main/CLAUDE.md
 # …or append to an existing CLAUDE.md / AGENTS.md:

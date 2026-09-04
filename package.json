@@ -27,6 +27,7 @@
     "scripts/",
     "skills/",
     "commands/",
+    "hooks/",
     "CLAUDE.md",
     "AGENTS.md",
     "GEMINI.md",
