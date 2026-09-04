@@ -246,7 +246,7 @@ Then `/visualize <what to draw>`, or a bare `/visualize` to draw whatever's curr
 npx @clawnify/greybeard
 ```
 
-It detects the AI coding agents you actually use and installs the right files for each: the seven guidelines into the rule file each one reads (`CLAUDE.md`, `AGENTS.md`, `GEMINI.md`, `.cursor/rules/`, `.windsurf/rules/`, `.clinerules/`, `.github/copilot-instructions.md`), plus the `skillify` / `check-resolvable` / `verify-responsive` skills for Claude Code and OpenClaw, the `/pressure-test`, `/sidenote` and `/visualize` commands for Claude Code, and the always-on guidelines plugin for OpenCode. Shared files are edited between markers, so re-running is a safe no-op and your own content is preserved.
+It detects the AI coding agents you actually use and installs the right files for each, at two tiers: what's **installed on your system** (Claude Code, OpenCode, OpenClaw) gets its global files once — the guidelines into `~/.claude/CLAUDE.md`, the `skillify` / `check-resolvable` / `verify-responsive` skills, the `/pressure-test`, `/sidenote` and `/visualize` commands, and the OpenCode guidelines plugin; what's **used in this repo** (its rule file or directory exists here — `AGENTS.md`, `GEMINI.md`, `copilot-instructions.md`, `.cursor/`, `.windsurf/`, `.clinerules/`) gets the seven guidelines in the format it reads. Having an agent installed on your machine never sprinkles rule files into repos that don't use it — adopt one there with `--all` or `--only <agent>`. Shared files are edited between markers, so re-running is a safe no-op and your own content is preserved.
 
 ```bash
 npx @clawnify/greybeard --list        # show detected agents

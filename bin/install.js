@@ -31,22 +31,29 @@ const BLOCK_RE = new RegExp(`\\n*${MARK_START}[\\s\\S]*?${MARK_END}\\n?`);
 const HANDMERGE_MARK = '## 1. Think Before Coding';
 
 // ── Provider matrix ─────────────────────────────────────────────────────────
-// detect: paths that, if present, mean the agent is in use (~ = home, ./ = cwd).
+// Detection is two-tier, matching where each install lands:
+//   machine-level agents (claude, opencode, openclaw) are detected by their
+//   home dir and install global files — once per machine, agent-scoped;
+//   project-level agents are detected ONLY by repo signals (the agent's
+//   dedicated directory or its rule file already present) — having the agent
+//   installed on the machine must not sprinkle rule files into every repo.
+//   Use --all or --only <id> to adopt an agent in a repo it doesn't use yet.
 // kind:   how to install —
 //   claude   global ~/.claude: principles block + skills/ + commands/
 //   openclaw global ~/.openclaw/workspace/skills: skills only
+//   opencode global ~/.config/opencode/plugins: guidelines plugin
 //   file     project: write the dedicated rule file verbatim (overwrite)
 //   append   project: fence the principles into a shared file (idempotent)
 const PROVIDERS = [
   { id: 'claude',   name: 'Claude Code',    detect: ['~/.claude'],            kind: 'claude' },
   { id: 'opencode', name: 'OpenCode',       detect: ['~/.config/opencode'],   kind: 'opencode' },
+  { id: 'openclaw', name: 'OpenClaw',       detect: ['~/.openclaw'],          kind: 'openclaw' },
   { id: 'cursor',   name: 'Cursor',         detect: ['./.cursor'],            kind: 'file',   src: '.cursor/rules/karpathy-skills.mdc' },
   { id: 'windsurf', name: 'Windsurf',       detect: ['./.windsurf'],          kind: 'file',   src: '.windsurf/rules/karpathy-skills.md' },
   { id: 'cline',    name: 'Cline',          detect: ['./.clinerules'],        kind: 'file',   src: '.clinerules/karpathy-skills.md' },
-  { id: 'copilot',  name: 'GitHub Copilot', detect: ['./.github'],            kind: 'append', dest: '.github/copilot-instructions.md' },
-  { id: 'codex',    name: 'Codex',          detect: ['~/.codex', './AGENTS.md'], kind: 'append', dest: 'AGENTS.md' },
-  { id: 'gemini',   name: 'Gemini CLI',     detect: ['~/.gemini'],            kind: 'append', dest: 'GEMINI.md' },
-  { id: 'openclaw', name: 'OpenClaw',       detect: ['~/.openclaw'],          kind: 'openclaw' },
+  { id: 'copilot',  name: 'GitHub Copilot', detect: ['./.github/copilot-instructions.md'], kind: 'append', dest: '.github/copilot-instructions.md' },
+  { id: 'codex',    name: 'Codex',          detect: ['./AGENTS.md'],          kind: 'append', dest: 'AGENTS.md' },
+  { id: 'gemini',   name: 'Gemini CLI',     detect: ['./GEMINI.md'],          kind: 'append', dest: 'GEMINI.md' },
 ];
 
 // ── Args ────────────────────────────────────────────────────────────────────
@@ -206,6 +213,10 @@ function main() {
 
   let chosen = PROVIDERS;
   if (o.only.length) chosen = PROVIDERS.filter((p) => o.only.includes(p.id));
+  // Bare --uninstall sweeps every provider: detection is repo-scoped for
+  // project agents, so it can no longer see files a previous (home-detected)
+  // install may have left in this repo.
+  else if (o.uninstall) chosen = PROVIDERS;
   else if (!o.all) chosen = PROVIDERS.filter(detected);
 
   if (!chosen.length) {
@@ -236,15 +247,19 @@ Usage:
 Flags:
   --all          install for every supported agent, detected or not
   --only <id>    install only for the given agent (repeatable)
-  --uninstall    remove what this installer added
+  --uninstall    remove what this installer added (all agents unless --only)
   --force        append the guidelines even if a hand-merged copy is detected
   --dry-run      show what would change without writing
   --list         list supported agents and detection status
   --help         this message
 
-With no flags, installs for every agent detected on your machine / in this project.
-Shared files (CLAUDE.md, AGENTS.md, GEMINI.md, copilot-instructions.md) are edited
-in place between markers, so re-running is safe and your other content is preserved.`);
+With no flags, installs per what it finds at two tiers: agents installed on the
+system (Claude Code, OpenCode, OpenClaw) get their global files once; agents
+actually used in this repo (their rule file or directory exists here) get the
+per-repo files. Use --all / --only to adopt an agent in a repo it doesn't use
+yet. Shared files (CLAUDE.md, AGENTS.md, GEMINI.md, copilot-instructions.md)
+are edited in place between markers, so re-running is safe and your other
+content is preserved.`);
 }
 
 main();
