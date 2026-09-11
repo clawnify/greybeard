@@ -206,7 +206,7 @@ cp commands/pressure-test.md ~/.claude/commands/      # personal, all projects
 # or: .claude/commands/  for one project
 ```
 
-Then `/pressure-test` (tests the current direction) or `/pressure-test <a specific decision>`.
+Then `/pressure-test <a specific decision>` to test one call in depth, or bare `/pressure-test` to sweep every solution the session proposed — an inventory with a verdict on each (the holds stated as plainly as the fails), plus the section only the sweep produces: the decisions that were never examined at all.
 
 ## The `/sidenote` command
 
