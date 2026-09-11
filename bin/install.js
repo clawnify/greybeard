@@ -5,7 +5,7 @@
 //
 // Detects the AI coding agents on your machine / in this project and installs
 // the Karpathy-inspired guidelines (+ Claude Code skills and the /pressure-test,
-// /sidenote and /visualize commands) into each one's rule location. Pure Node
+// /sidenote, /visualize and /wrap commands) into each one's rule location. Pure Node
 // stdlib, zero runtime deps.
 //
 //   npx @clawnify/greybeard            # install for every detected agent
@@ -148,6 +148,8 @@ function rel(p) { return p.startsWith(HOME) ? '~' + p.slice(HOME.length) : path.
 const PRINCIPLES = fs.readFileSync(path.join(PKG, 'AGENTS.md'), 'utf8');
 // Skill directories shipped to every provider that reads skills. Add a new one here only.
 const SKILLS = ['skillify', 'check-resolvable', 'verify-responsive'];
+// Slash commands shipped to every provider that reads commands. Add a new one here only.
+const COMMANDS = ['pressure-test', 'sidenote', 'visualize', 'wrap'];
 
 // ── Per-provider install / uninstall ────────────────────────────────────────
 // The OpenCode plugin serves both `opencode` (V1) and `opencode2` (V2 beta):
@@ -164,17 +166,13 @@ function installClaude(dir, un) {
     removeFenceFrom(path.join(dir, 'CLAUDE.md'));
     for (const s of SKILLS) removePath(path.join(dir, 'skills', s));
     removePath(path.join(dir, 'commands', 'scalable.md')); // legacy name, pre-rename
-    removePath(path.join(dir, 'commands', 'pressure-test.md'));
-    removePath(path.join(dir, 'commands', 'sidenote.md'));
-    removePath(path.join(dir, 'commands', 'visualize.md'));
+    for (const c of COMMANDS) removePath(path.join(dir, 'commands', `${c}.md`));
     return;
   }
   fenceInto(path.join(dir, 'CLAUDE.md'), PRINCIPLES);
   for (const s of SKILLS) copyDir(path.join(PKG, 'skills', s), path.join(dir, 'skills', s));
   removePath(path.join(dir, 'commands', 'scalable.md')); // clean up the pre-rename command from prior installs
-  writeFile(path.join(dir, 'commands', 'pressure-test.md'), fs.readFileSync(path.join(PKG, 'commands', 'pressure-test.md'), 'utf8'));
-  writeFile(path.join(dir, 'commands', 'sidenote.md'), fs.readFileSync(path.join(PKG, 'commands', 'sidenote.md'), 'utf8'));
-  writeFile(path.join(dir, 'commands', 'visualize.md'), fs.readFileSync(path.join(PKG, 'commands', 'visualize.md'), 'utf8'));
+  for (const c of COMMANDS) writeFile(path.join(dir, 'commands', `${c}.md`), fs.readFileSync(path.join(PKG, 'commands', `${c}.md`), 'utf8'));
 }
 
 function applyProvider(p, un) {
