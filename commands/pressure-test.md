@@ -3,7 +3,13 @@ description: Pressure-test the current approach against scalability, long-term, 
 argument-hint: [decision or approach to test — optional]
 ---
 
-Run the decision test on **$ARGUMENTS** — or, if that's empty, on the approach currently on the table in this conversation.
+Run the decision test on **$ARGUMENTS** — or, if that's empty, on every solution this conversation has proposed.
+
+**With no argument, sweep — don't zoom.** The targeted form asks *is this the right call?* about one decision; the no-argument form asks *did we miss anything?* about all of them. Same evidence standard, same ledger — a wider surface, not a softer test.
+
+- **Inventory first.** List every decision the session actually made, including the ones made in passing — a default accepted without discussion is an entry, not a footnote.
+- **Rule per item, and state the holds as plainly as the fails** — *holds / holds with a caveat / fails*. A sweep that prints only problems is a bug list, not a coverage report; manufacturing objections to look thorough is the failure mode this form is most prone to.
+- **Then the section only this form can produce: what was never examined.** Defaults taken silently, options never raised, questions nobody asked. "Did we see everything" is answered by the list of what we *didn't* look at — re-litigating what we already argued about is not coverage.
 
 The governing question for the choice: **whatever is scalable, long term, and cannot be done in a more efficient way.**
 
