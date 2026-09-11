@@ -4,9 +4,10 @@
 // greybeard — cross-platform installer.
 //
 // Detects the AI coding agents on your machine / in this project and installs
-// the Karpathy-inspired guidelines (+ Claude Code skills and the /pressure-test,
-// /sidenote, /visualize and /wrap commands) into each one's rule location. Pure Node
-// stdlib, zero runtime deps.
+// the Karpathy-inspired guidelines into each one's rule location. Claude Code's
+// skills and commands come from the greybeard plugin, installed and kept current
+// through Claude Code's own `claude plugin` CLI. Pure Node stdlib, zero runtime
+// deps.
 //
 //   npx @clawnify/greybeard            # install for every detected agent
 //   npx @clawnify/greybeard --all      # install for all agents, detected or not
@@ -17,6 +18,7 @@
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
+const { spawnSync } = require('child_process');
 
 const PKG = path.resolve(__dirname, '..');
 const HOME = os.homedir();
@@ -39,7 +41,7 @@ const HANDMERGE_MARK = '## 1. Think Before Coding';
 //   installed on the machine must not sprinkle rule files into every repo.
 //   Use --all or --only <id> to adopt an agent in a repo it doesn't use yet.
 // kind:   how to install —
-//   claude   global ~/.claude: principles block + skills/ + commands/
+//   claude   global ~/.claude: principles block + the greybeard plugin
 //   openclaw global ~/.openclaw/workspace/skills: skills only
 //   opencode global ~/.config/opencode/plugins: guidelines plugin
 //   file     project: write the dedicated rule file verbatim (overwrite)
@@ -148,8 +150,11 @@ function rel(p) { return p.startsWith(HOME) ? '~' + p.slice(HOME.length) : path.
 const PRINCIPLES = fs.readFileSync(path.join(PKG, 'AGENTS.md'), 'utf8');
 // Skill directories shipped to every provider that reads skills. Add a new one here only.
 const SKILLS = ['skillify', 'check-resolvable', 'verify-responsive'];
-// Slash commands shipped to every provider that reads commands. Add a new one here only.
-const COMMANDS = ['pressure-test', 'sidenote', 'visualize', 'wrap'];
+// Command files earlier versions copied into ~/.claude/commands (plus 'scalable',
+// the pre-rename name of pressure-test). The plugin ships these now; this list
+// exists only to clear the copies off machines that still carry them. Nothing to
+// add here for a new command — the plugin picks it up from commands/.
+const LEGACY_COMMAND_COPIES = ['pressure-test', 'sidenote', 'visualize', 'wrap', 'scalable'];
 
 // ── Per-provider install / uninstall ────────────────────────────────────────
 // The OpenCode plugin serves both `opencode` (V1) and `opencode2` (V2 beta):
@@ -161,19 +166,81 @@ function installOpencode(un) {
   return writeFile(dest, fs.readFileSync(path.join(PKG, 'hooks', 'greybeard-opencode.js'), 'utf8'));
 }
 
+// Claude Code gets the guidelines as a fenced block in ~/.claude/CLAUDE.md, and
+// everything else — skills and commands — from the greybeard plugin, through
+// Claude Code's own plugin manager. Earlier versions copied those files into
+// ~/.claude/skills and ~/.claude/commands as well; anyone who also had the
+// plugin ended up with two copies of every command in the resolver, which drift
+// the moment one channel updates. The copies are removed on every run, install
+// or uninstall, so an existing machine de-duplicates itself.
 function installClaude(dir, un) {
+  for (const s of SKILLS) removePath(path.join(dir, 'skills', s));
+  for (const c of LEGACY_COMMAND_COPIES) removePath(path.join(dir, 'commands', `${c}.md`));
   if (un) {
     removeFenceFrom(path.join(dir, 'CLAUDE.md'));
-    for (const s of SKILLS) removePath(path.join(dir, 'skills', s));
-    removePath(path.join(dir, 'commands', 'scalable.md')); // legacy name, pre-rename
-    for (const c of COMMANDS) removePath(path.join(dir, 'commands', `${c}.md`));
-    return;
+    return ensurePlugin(true);
   }
   fenceInto(path.join(dir, 'CLAUDE.md'), PRINCIPLES);
-  for (const s of SKILLS) copyDir(path.join(PKG, 'skills', s), path.join(dir, 'skills', s));
-  removePath(path.join(dir, 'commands', 'scalable.md')); // clean up the pre-rename command from prior installs
-  for (const c of COMMANDS) writeFile(path.join(dir, 'commands', `${c}.md`), fs.readFileSync(path.join(PKG, 'commands', `${c}.md`), 'utf8'));
+  return ensurePlugin(false);
 }
+
+// ── The Claude Code plugin channel ──────────────────────────────────────────
+const PLUGIN_ID = 'greybeard@greybeard';
+const MARKETPLACE_SRC = 'clawnify/greybeard'; // what `marketplace add` takes
+const MARKETPLACE_NAME = 'greybeard';         // what it's called once added
+
+const lastLine = (s) => (s || '').split('\n').filter(Boolean).pop() || 'no output';
+
+function claudeCli(args) {
+  const r = spawnSync('claude', args, { encoding: 'utf8', shell: process.platform === 'win32' });
+  if (r.error) return { missing: r.error.code === 'ENOENT' };
+  return { ok: r.status === 0, out: `${r.stdout || ''}${r.stderr || ''}`.trim() };
+}
+
+// Installed version at user scope, or null. Read from --json rather than matched
+// out of human output, so a wording change upstream can't silently break this.
+function installedVersion(probe) {
+  if (!probe.ok) return null;
+  try {
+    const hit = JSON.parse(probe.out).find((p) => p.id === PLUGIN_ID && p.scope === 'user');
+    return hit ? hit.version : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function ensurePlugin(un) {
+  const probe = claudeCli(['plugin', 'list', '--json']);
+  if (probe.missing) {
+    warnings.push(un
+      ? `claude CLI not on PATH — run \`claude plugin uninstall ${PLUGIN_ID}\` to remove the skills and commands.`
+      : `claude CLI not on PATH — run \`claude plugin marketplace add ${MARKETPLACE_SRC}\` then \`claude plugin install ${PLUGIN_ID}\` to get the skills and commands.`);
+    return;
+  }
+  const before = installedVersion(probe);
+  if (un) {
+    if (!before) return;
+    if (DRY) { actions.push('would uninstall the greybeard plugin'); return; }
+    const r = claudeCli(['plugin', 'uninstall', PLUGIN_ID, '-y', '--scope', 'user']);
+    if (!r.ok) return warnings.push(`claude plugin uninstall ${PLUGIN_ID} failed: ${lastLine(r.out)}`);
+    actions.push('uninstalled the greybeard plugin');
+    return;
+  }
+  if (DRY) { actions.push(`would ${before ? 'update' : 'install'} the greybeard plugin`); return; }
+  const steps = before
+    ? [['plugin', 'marketplace', 'update', MARKETPLACE_NAME], ['plugin', 'update', PLUGIN_ID, '-y', '--scope', 'user']]
+    : [['plugin', 'marketplace', 'add', MARKETPLACE_SRC], ['plugin', 'install', PLUGIN_ID, '-y', '--scope', 'user']];
+  for (const args of steps) {
+    const r = claudeCli(args);
+    if (!r.ok) return warnings.push(`claude ${args.join(' ')} failed: ${lastLine(r.out)}`);
+  }
+  // Report only a real change, so a re-run stays a true no-op in the summary.
+  const after = installedVersion(claudeCli(['plugin', 'list', '--json']));
+  if (after && after !== before) {
+    actions.push(`${before ? 'updated' : 'installed'} the greybeard plugin \u2192 ${after} (restart Claude Code to apply)`);
+  }
+}
+
 
 function applyProvider(p, un) {
   if (p.kind === 'claude') return installClaude(expand('~/.claude'), un);

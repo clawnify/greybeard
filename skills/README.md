@@ -38,18 +38,20 @@ The library is only as valuable as the resolver is clean:
 
 These are standard [Claude Code Agent Skills](https://code.claude.com/docs/en/skills) — a directory with a `SKILL.md`. The `name` + `description` frontmatter is portable to any harness that reads skills (Cursor, Codex, OpenClaw).
 
-**Personal (all your projects):**
+**Claude Code** installs them as part of the greybeard plugin, through its own plugin manager — no copying, and `claude plugin update` keeps them current:
+
+```bash
+claude plugin marketplace add clawnify/greybeard
+claude plugin install greybeard@greybeard
+```
+
+(`npx @clawnify/greybeard` runs those two for you.) Don't also copy the directories into `~/.claude/skills/` — that puts two copies of every skill in the resolver, which is the exact thing `check-resolvable` exists to catch.
+
+**Any other harness** reads skills from a directory, so copy them in:
 
 ```bash
 mkdir -p ~/.claude/skills
-cp -R skillify check-resolvable verify-responsive ~/.claude/skills/
-```
-
-**One project only:**
-
-```bash
-mkdir -p .claude/skills
-cp -R skillify check-resolvable verify-responsive .claude/skills/
+cp -R skillify check-resolvable verify-responsive ~/.claude/skills/   # or .claude/skills/ for one project
 ```
 
 Then add a one-line entry for each to your project's resolver (`AGENTS.md` / `CLAUDE.md`) so the agent — and your teammates — can find them. After that, just say *"skillify this"* when you finish something worth keeping.
