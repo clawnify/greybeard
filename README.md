@@ -20,7 +20,7 @@
 
 > Built and maintained by [Clawnify](https://clawnify.com) — a managed platform that provisions AI agents with WhatsApp / Telegram / Email and browser capabilities for non-technical users.
 
-A single `CLAUDE.md` file to improve AI coding-agent behavior, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls, plus three sections we added for the AI-assisted-coding era. Ships with three runnable [skills](#skills-skillify-dry--mece-resolvers), its three commands — [`/pressure-test`](#the-pressure-test-command), the decision test, [`/sidenote`](#the-sidenote-command), park-a-thought, and [`/visualize`](#the-visualize-command), draw-the-real-shape — and a [one-command installer](#install) that fans it all out to every AI coding agent you use.
+A single `CLAUDE.md` file to improve AI coding-agent behavior, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls, plus three sections we added for the AI-assisted-coding era. Ships with three runnable [skills](#skills-skillify-dry--mece-resolvers), its four commands — [`/pressure-test`](#the-pressure-test-command), the decision test, [`/sidenote`](#the-sidenote-command), park-a-thought, [`/visualize`](#the-visualize-command), draw-the-real-shape, and [`/wrap`](#the-wrap-command), can-I-close-this — and a [one-command installer](#install) that fans it all out to every AI coding agent you use.
 
 ## The Problems
 
@@ -192,9 +192,9 @@ And the **practice skills** those two produce — procedures captured with `skil
 
 They're standard [Claude Code Agent Skills](https://code.claude.com/docs/en/skills) (portable to Cursor, Codex, OpenClaw). Install and usage: [`skills/README.md`](./skills/README.md).
 
-## The three commands
+## The four commands
 
-Greybeard's slash commands are **`/pressure-test`**, **`/sidenote`** and **`/visualize`** — one guards the *quality* of a decision, one guards your *focus* while you make it, and one makes sure what you're shown is the code that's actually there. The skills and always-on guidelines back them up, but these are the three you'll reach for by hand.
+Greybeard's slash commands are **`/pressure-test`**, **`/sidenote`**, **`/visualize`** and **`/wrap`** — one guards the *quality* of a decision, one guards your *focus* while you make it, one makes sure what you're shown is the code that's actually there, and one decides whether the session can end. The skills and always-on guidelines back them up, but these are the four you'll reach for by hand.
 
 ## The `/pressure-test` command
 
@@ -238,6 +238,20 @@ cp commands/visualize.md ~/.claude/commands/      # personal, all projects
 
 Then `/visualize <what to draw>`, or a bare `/visualize` to draw whatever's currently on the table.
 
+## The `/wrap` command
+
+The question at the end of every session: *can I close this and delete the worktree?* Get it wrong one way and you lose work — an unpushed branch, or the hour of dead ends that only ever existed in the context. Get it wrong the other way and sessions pile up, half-finished, each one a tab nobody dares close.
+
+[`commands/wrap.md`](./commands/wrap.md) makes the agent rule on it, and there are only two rulings: **finish it now**, or **wrap it** — turn what's here into something durable and say it's safe to delete. The test isn't *is this important*, it's **what dies when the worktree dies**: uncommitted edits, untracked files, commits that never left the machine, and the part no diff carries — what you tried, what you rejected, and why. Four hard stops force *finish now* (the world outside the repo is mid-change; the trunk is worse than you found it; what's left is minutes of work — §5's pre-AI estimate again; or you can't write the brief, which means you don't understand the state well enough to hand it off). Otherwise it picks the cheapest durable form that actually carries the work — a `/sidenote` entry, a committed doc, a GitHub issue, or the branch pushed with a draft PR — writes the five-line brief (goal / done / left / **rejected** / verify, anchored to `file:line`), shows you the artifact before creating it, and confirms it landed *outside* the worktree before answering. An unpushed commit is not a handoff.
+
+```bash
+mkdir -p ~/.claude/commands
+cp commands/wrap.md ~/.claude/commands/      # personal, all projects
+# or: .claude/commands/  for one project
+```
+
+Then a bare `/wrap` at the point you'd otherwise close the tab. It ends on the verdict line — `Safe to close — <URL> carries it.` or `Not yet — <the one thing> has to close here first.` — and hands you the `git worktree remove` command rather than running it, since it's standing in the worktree it would delete.
+
 ## Install
 
 **One command — every agent on your machine:**
@@ -246,7 +260,7 @@ Then `/visualize <what to draw>`, or a bare `/visualize` to draw whatever's curr
 npx @clawnify/greybeard
 ```
 
-It detects the AI coding agents you actually use and installs the right files for each, at two tiers: what's **installed on your system** (Claude Code, OpenCode, OpenClaw) gets its global files once — the guidelines into `~/.claude/CLAUDE.md`, the `skillify` / `check-resolvable` / `verify-responsive` skills, the `/pressure-test`, `/sidenote` and `/visualize` commands, and the OpenCode guidelines plugin; what's **used in this repo** (its rule file or directory exists here — `AGENTS.md`, `GEMINI.md`, `copilot-instructions.md`, `.cursor/`, `.windsurf/`, `.clinerules/`) gets the seven guidelines in the format it reads. Having an agent installed on your machine never sprinkles rule files into repos that don't use it — adopt one there with `--all` or `--only <agent>`. Shared files are edited between markers, so re-running is a safe no-op and your own content is preserved.
+It detects the AI coding agents you actually use and installs the right files for each, at two tiers: what's **installed on your system** (Claude Code, OpenCode, OpenClaw) gets its global files once — the guidelines into `~/.claude/CLAUDE.md`, the `skillify` / `check-resolvable` / `verify-responsive` skills, the `/pressure-test`, `/sidenote`, `/visualize` and `/wrap` commands, and the OpenCode guidelines plugin; what's **used in this repo** (its rule file or directory exists here — `AGENTS.md`, `GEMINI.md`, `copilot-instructions.md`, `.cursor/`, `.windsurf/`, `.clinerules/`) gets the seven guidelines in the format it reads. Having an agent installed on your machine never sprinkles rule files into repos that don't use it — adopt one there with `--all` or `--only <agent>`. Shared files are edited between markers, so re-running is a safe no-op and your own content is preserved.
 
 ```bash
 npx @clawnify/greybeard --list        # show detected agents
