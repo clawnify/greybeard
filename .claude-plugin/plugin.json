@@ -1,6 +1,6 @@
 {
   "name": "greybeard",
-  "description": "Karpathy-inspired coding-agent skills: skillify (capture repeated work), check-resolvable (keep skills DRY + MECE), verify-responsive (render a UI at real viewport widths), and the /pressure-test, /sidenote, /visualize and /wrap commands.",
+  "description": "Karpathy-inspired coding-agent guidelines and seven portable skills: skillify, check-resolvable, verify-responsive, pressure-test, sidenote, visualize, and wrap.",
   "author": {
     "name": "Clawnify",
     "url": "https://github.com/clawnify"

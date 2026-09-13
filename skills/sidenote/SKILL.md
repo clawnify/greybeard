@@ -1,9 +1,12 @@
 ---
-description: Park a passing thought as a later-task without derailing the current one — logged, not acted on.
+name: sidenote
+description: "Park a passing thought as a later-task without derailing the current one — logged, not acted on. Use when the user asks to park a thought, sends SIDENOTE:, or wants to list parked notes."
 argument-hint: [thought to park — optional]
 ---
 
-Park this thought — **$ARGUMENTS** — as a sidenote. A sidenote is a *later-task*, not a *now-task*. Your job is to record it and keep going, nothing more.
+The optional input is the text supplied with this skill invocation, through a slash command or a plain-language request. If none was supplied, follow the no-input behavior below.
+
+Park this thought — **the supplied input** — as a sidenote. A sidenote is a *later-task*, not a *now-task*. Your job is to record it and keep going, nothing more.
 
 **The contract — hold it exactly:**
 
@@ -28,4 +31,4 @@ Park this thought — **$ARGUMENTS** — as a sidenote. A sidenote is a *later-t
 
 Then: **one-line acknowledgement** (e.g. `Parked in the sidenotes file — continuing.`) and **resume exactly where you left off**, as if the note had never arrived.
 
-**If `$ARGUMENTS` is empty** (a bare `/sidenote`), there's nothing to park — treat it as a *flush*: read the parking file (same location as above; if a legacy `.claude/sidenotes.md` also exists at the project root, read that too and say so, so its entries can be moved) and list the **open** entries back to me so I can decide what to pick up. Open means *not checked off* — every entry except the ones marked done (`- [x]`), so older bullets without a checkbox still count. Change nothing, act on nothing, then resume. (Checking an item off to `- [x]` happens when it's actually handled — not part of parking or flushing.)
+**If no input was supplied** (a bare `/sidenote`), there's nothing to park — treat it as a *flush*: read the parking file (same location as above; if a legacy `.claude/sidenotes.md` also exists at the project root, read that too and say so, so its entries can be moved) and list the **open** entries back to me so I can decide what to pick up. Open means *not checked off* — every entry except the ones marked done (`- [x]`), so older bullets without a checkbox still count. Change nothing, act on nothing, then resume. (Checking an item off to `- [x]` happens when it's actually handled — not part of parking or flushing.)

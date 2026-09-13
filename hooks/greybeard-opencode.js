@@ -24,8 +24,8 @@
 // Either string marks a file as already carrying the guidelines.
 const MARKERS = ['<!-- karpathy-skills:start -->', '## 1. Think Before Coding'];
 
-// The condensed behavioral core: the three pillars (from commands/
-// pressure-test.md) plus the highest-frequency stances from CLAUDE.md
+// The condensed behavioral core: the three pillars (from
+// skills/pressure-test/SKILL.md) plus the highest-frequency stances from CLAUDE.md
 // (opinionated tradeoffs, symptom-vs-diagnosis, stale time budgets). Keep
 // wording in sync with hooks/greybeard-activate.js — and keep this block
 // small: it is paid as context in every session, so a rule earns a paragraph

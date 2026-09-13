@@ -1,9 +1,12 @@
 ---
-description: Pressure-test the current approach against scalability, long-term, and efficiency, then recommend the best option.
+name: pressure-test
+description: "Pressure-test the current approach against scalability, long-term, and efficiency, then recommend the best option. Use when the user asks to pressure-test a decision or audit the session's approaches."
 argument-hint: [decision or approach to test — optional]
 ---
 
-Run the decision test on **$ARGUMENTS** — or, if that's empty, on every solution this conversation has proposed.
+The optional input is the text supplied with this skill invocation, through a slash command or a plain-language request. If none was supplied, follow the no-input behavior below.
+
+Run the decision test on **the supplied input** — or, if that's empty, on every solution this conversation has proposed.
 
 **With no argument, sweep — don't zoom.** The targeted form asks *is this the right call?* about one decision; the no-argument form asks *did we miss anything?* about all of them. Same evidence standard, same ledger — a wider surface, not a softer test.
 

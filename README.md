@@ -20,7 +20,7 @@
 
 > Built and maintained by [Clawnify](https://clawnify.com) — a managed platform that provisions AI agents with WhatsApp / Telegram / Email and browser capabilities for non-technical users.
 
-A single `CLAUDE.md` file to improve AI coding-agent behavior, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls, plus three sections we added for the AI-assisted-coding era. Ships with three runnable [skills](#skills-skillify-dry--mece-resolvers), its four commands — [`/pressure-test`](#the-pressure-test-command), the decision test, [`/sidenote`](#the-sidenote-command), park-a-thought, [`/visualize`](#the-visualize-command), draw-the-real-shape, and [`/wrap`](#the-wrap-command), can-I-close-this — and a [one-command installer](#install) that fans it all out to every AI coding agent you use.
+A single `CLAUDE.md` file to improve AI coding-agent behavior, derived from [Andrej Karpathy's observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding pitfalls, plus three sections we added for the AI-assisted-coding era. Ships with seven portable [skills](#skills-skillify-dry--mece-resolvers), including four on-demand workflows — [`/pressure-test`](#the-pressure-test-command), the decision test, [`/sidenote`](#the-sidenote-command), park-a-thought, [`/visualize`](#the-visualize-command), draw-the-real-shape, and [`/wrap`](#the-wrap-command), can-I-close-this — and a [one-command installer](#install) for the guidelines and agent-specific integrations described below.
 
 ## The Problems
 
@@ -194,21 +194,17 @@ They're standard [Claude Code Agent Skills](https://code.claude.com/docs/en/skil
 
 ## The four commands
 
+These four workflows are portable skills, each maintained once in `skills/<name>/SKILL.md`. Claude Code also exposes them as slash commands; Codex discovers them through its skill catalog.
+
 Greybeard's slash commands are **`/pressure-test`**, **`/sidenote`**, **`/visualize`** and **`/wrap`** — one guards the *quality* of a decision, one guards your *focus* while you make it, one makes sure what you're shown is the code that's actually there, and one decides whether the session can end. The skills and always-on guidelines back them up, but these are the four you'll reach for by hand.
 
-**Getting them.** The commands ship inside the greybeard plugin, so Claude Code installs and updates them through its own plugin manager — `npx @clawnify/greybeard` does it for you, or do it by hand:
+**Getting them.** Install the greybeard plugin with your client's plugin manager; see [installation and updates](#install). In Claude Code, use `/greybeard:pressure-test`, `/greybeard:sidenote`, `/greybeard:visualize`, and `/greybeard:wrap`. The bare names below apply when installed as standalone skills. In Codex, select the skill with `$` (for example `$greybeard:pressure-test`) or ask “Pressure-test this approach.” Optional input comes from the invoking message; a bare invocation keeps each workflow's no-input behavior.
 
-```bash
-claude plugin marketplace add clawnify/greybeard
-claude plugin install greybeard@greybeard
-claude plugin update greybeard@greybeard     # later, to pull new commands
-```
-
-Don't also copy the files into `~/.claude/commands/`: you'd have two copies of every command in the resolver, drifting apart the moment one side updates. Plugin commands are namespaced — `/greybeard:pressure-test`, `/greybeard:wrap` — so the bare names used below are how they read in a harness where you drop the file in yourself.
+Don't also copy the same workflows into a local skills or commands directory: that creates duplicate resolver entries. There are no separate `commands/` wrappers to install or update.
 
 ## The `/pressure-test` command
 
-[`commands/pressure-test.md`](./commands/pressure-test.md) is a Claude Code slash command that runs the §5 decision test on demand: pressure-test the approach on the table against **scalable / long-term / efficient** — *whatever is scalable, long term, and cannot be done in a more efficient way* — and get one decisive recommendation, with stale-time-budget shortcuts called out. The main context runs the test and owns the ruling; subagents are scoped instruments, spawned only where a check benefits from being outside the session — challenging a belief the conversation already holds (a fresh context can't inherit its anchoring), or online research and docs verification that parallelize while the main agent keeps reasoning. Never the test wholesale: a main agent that only orchestrates stops being the main brain. Every ruling ships with a claims ledger: each load-bearing claim — one per plan item at minimum, every size-word counts — cited to the `file:line` actually opened, or tagged **ASSUMED**; no estimate may attach to an assumed claim.
+[`skills/pressure-test/SKILL.md`](./skills/pressure-test/SKILL.md) is a portable skill that runs the §5 decision test on demand: pressure-test the approach on the table against **scalable / long-term / efficient** — *whatever is scalable, long term, and cannot be done in a more efficient way* — and get one decisive recommendation, with stale-time-budget shortcuts called out. The main context runs the test and owns the ruling; subagents are scoped instruments, spawned only where a check benefits from being outside the session — challenging a belief the conversation already holds (a fresh context can't inherit its anchoring), or online research and docs verification that parallelize while the main agent keeps reasoning. Never the test wholesale: a main agent that only orchestrates stops being the main brain. Every ruling ships with a claims ledger: each load-bearing claim — one per plan item at minimum, every size-word counts — cited to the `file:line` actually opened, or tagged **ASSUMED**; no estimate may attach to an assumed claim.
 
 Use `/pressure-test <a specific decision>` to test one call in depth, or bare `/pressure-test` to sweep every solution the session proposed — an inventory with a verdict on each (the holds stated as plainly as the fails), plus the section only the sweep produces: the decisions that were never examined at all.
 
@@ -216,17 +212,17 @@ Use `/pressure-test <a specific decision>` to test one call in depth, or bare `/
 
 You're mid-way through a big task and a passing thought hits — *"the retry logic probably has the same bug", "remind me to check the pricing later"* — something you don't want to forget. Drop it in the chat as-is and the agent reads it as a new request: it rushes the current task to "get to" your note, and the big task pays for it.
 
-[`commands/sidenote.md`](./commands/sidenote.md) reframes that thought as a **parked later-task, not a now-task**. The agent logs it verbatim to a parking file (durable across compaction, session end, and worktree removal) — with a one-line anchor (task in progress, the file it points at, branch) so it still makes sense when another session or agent reads it cold — gives a one-line ack, and resumes *exactly* where it was — same scope, same pace, no cutting corners to reach the note. A bare `/sidenote` flushes the open list back to you.
+[`skills/sidenote/SKILL.md`](./skills/sidenote/SKILL.md) reframes that thought as a **parked later-task, not a now-task**. The agent logs it verbatim to a parking file (durable across compaction, session end, and worktree removal) — with a one-line anchor (task in progress, the file it points at, branch) so it still makes sense when another session or agent reads it cold — gives a one-line ack, and resumes *exactly* where it was — same scope, same pace, no cutting corners to reach the note. A bare `/sidenote` flushes the open list back to you.
 
 Use `/sidenote <the thought>` to park one, or `/sidenote` to see what's parked. The notes land in `$(git rev-parse --path-format=absolute --git-common-dir)/info/sidenotes.md` — inside `.git/`, so they are personal per-repo scratch that no ignore rule has to protect and no `git add -A` can sweep into a PR, shared across all worktrees of the repo. Outside a git repo the fallback is `.claude/sidenotes.md` at the project root.
 
-> **No slash commands?** For agents that read a rule file but have no `/` commands (Cursor, Codex, Copilot…), the same contract works as a plain-text convention: prefix the message with `SIDENOTE:` and the agent parks it instead of acting. Add one line to your rule file so it's honored reliably — see [`commands/sidenote.md`](./commands/sidenote.md) for the exact contract.
+> **Plain-text invocation:** With the sidenote skill installed, ask to park a thought or prefix it with `SIDENOTE:`. Clients that only read rule files need an explicit rule for this convention; the standalone guidelines alone do not install the skill.
 
 ## The `/visualize` command
 
 Ask an agent to explain how something works and you get paragraphs. Ask it to *draw* the thing and you get comprehension — a call tree, a component tree, a sequence diagram. But a diagram is also the easiest place in the world to launder a guess: prose hedges out loud (*"it probably calls…"*), while boxes and arrows just assert. An architecture diagram drawn from priors reads as **verified**, and people build on it for weeks.
 
-[`commands/visualize.md`](./commands/visualize.md) is the §7 rule applied to pictures. It gives the agent a menu of visual forms — pseudocode, call tree, component tree, file tree, text sequence diagrams, shaped `diff`s, or one focused HTML file — and tells it to pick the *smallest* one that makes the point, **matched to the surface it lands on**: a terminal has no diagram renderer, so a `mermaid` fence there just prints its own source; the text forms are the picture already. Mermaid is reserved for surfaces that actually render it. Then the Greybeard part: **read the code before drawing it** (the actual files, this session — if the diagram has five nodes, you opened five things), **anchor every node** to a real `file:line`, **trace the current shape with the real input** (an anchor proves the node exists, not that the arrow fires — if the concrete key dead-ends in the registry, the dead end is the picture), and **tag anything unread as ASSUMED** with the check that would settle it. A diagram that's 90% verified and 10% quietly invented is 100% untrustworthy.
+[`skills/visualize/SKILL.md`](./skills/visualize/SKILL.md) is the §7 rule applied to pictures. It gives the agent a menu of visual forms — pseudocode, call tree, component tree, file tree, text sequence diagrams, shaped `diff`s, or one focused HTML file — and tells it to pick the *smallest* one that makes the point, **matched to the surface it lands on**: a terminal has no diagram renderer, so a `mermaid` fence there just prints its own source; the text forms are the picture already. Mermaid is reserved for surfaces that actually render it. Then the Greybeard part: **read the code before drawing it** (the actual files, this session — if the diagram has five nodes, you opened five things), **anchor every node** to a real `file:line`, **trace the current shape with the real input** (an anchor proves the node exists, not that the arrow fires — if the concrete key dead-ends in the registry, the dead end is the picture), and **tag anything unread as ASSUMED** with the check that would settle it. A diagram that's 90% verified and 10% quietly invented is 100% untrustworthy.
 
 Use `/visualize <what to draw>`, or a bare `/visualize` to draw whatever's currently on the table.
 
@@ -234,7 +230,7 @@ Use `/visualize <what to draw>`, or a bare `/visualize` to draw whatever's curre
 
 The question at the end of every session: *can I close this and delete the worktree?* Get it wrong one way and you lose work — an unpushed branch, or the hour of dead ends that only ever existed in the context. Get it wrong the other way and sessions pile up, half-finished, each one a tab nobody dares close.
 
-[`commands/wrap.md`](./commands/wrap.md) makes the agent rule on it, and there are only two rulings: **finish it now**, or **wrap it** — turn what's here into something durable and say it's safe to delete. The test isn't *is this important*, it's **what dies when the worktree dies**: uncommitted edits, untracked files, commits that never left the machine, and the part no diff carries — what you tried, what you rejected, and why. Four hard stops force *finish now* (the world outside the repo is mid-change; the trunk is worse than you found it; what's left is minutes of work — §5's pre-AI estimate again; or you can't write the brief, which means you don't understand the state well enough to hand it off). Otherwise it picks the cheapest durable form that actually carries the work — a `/sidenote` entry, a committed doc, a GitHub issue, or the branch pushed with a draft PR — writes the five-line brief (goal / done / left / **rejected** / verify, anchored to `file:line`), shows you the artifact before creating it, and confirms it landed *outside* the worktree before answering. An unpushed commit is not a handoff.
+[`skills/wrap/SKILL.md`](./skills/wrap/SKILL.md) makes the agent rule on it, and there are only two rulings: **finish it now**, or **wrap it** — turn what's here into something durable and say it's safe to delete. The test isn't *is this important*, it's **what dies when the worktree dies**: uncommitted edits, untracked files, commits that never left the machine, and the part no diff carries — what you tried, what you rejected, and why. Four hard stops force *finish now* (the world outside the repo is mid-change; the trunk is worse than you found it; what's left is minutes of work — §5's pre-AI estimate again; or you can't write the brief, which means you don't understand the state well enough to hand it off). Otherwise it picks the cheapest durable form that actually carries the work — a `/sidenote` entry, a committed doc, a GitHub issue, or the branch pushed with a draft PR — writes the five-line brief (goal / done / left / **rejected** / verify, anchored to `file:line`), shows you the artifact before creating it, and confirms it landed *outside* the worktree before answering. An unpushed commit is not a handoff.
 
 Reach for a bare `/wrap` at the point you'd otherwise close the tab. It ends on the verdict line — `Safe to close — <URL> carries it.` or `Not yet — <the one thing> has to close here first.` — and hands you the `git worktree remove` command rather than running it, since it's standing in the worktree it would delete.
 
@@ -246,7 +242,7 @@ Reach for a bare `/wrap` at the point you'd otherwise close the tab. It ends on 
 npx @clawnify/greybeard
 ```
 
-It detects the AI coding agents you actually use and installs the right files for each, at two tiers: what's **installed on your system** (Claude Code, OpenCode, OpenClaw) gets its global files once — the guidelines into `~/.claude/CLAUDE.md`, the greybeard plugin installed (or updated) through Claude Code's own `claude plugin` CLI, which is where its skills and commands live, the `skillify` / `check-resolvable` / `verify-responsive` skills for OpenClaw, and the OpenCode guidelines plugin; what's **used in this repo** (its rule file or directory exists here — `AGENTS.md`, `GEMINI.md`, `copilot-instructions.md`, `.cursor/`, `.windsurf/`, `.clinerules/`) gets the seven guidelines in the format it reads. Having an agent installed on your machine never sprinkles rule files into repos that don't use it — adopt one there with `--all` or `--only <agent>`. Shared files are edited between markers, so re-running is a safe no-op and your own content is preserved.
+It detects the AI coding agents you actually use and installs the right files for each, at two tiers: what's **installed on your system** (Claude Code, OpenCode, OpenClaw) gets its global files once — the guidelines into `~/.claude/CLAUDE.md`, the greybeard plugin installed (or updated) through Claude Code's own `claude plugin` CLI, which is where its skills and commands live, all seven skills for OpenClaw, and the OpenCode guidelines plugin; what's **used in this repo** (its rule file or directory exists here — `AGENTS.md`, `GEMINI.md`, `copilot-instructions.md`, `.cursor/`, `.windsurf/`, `.clinerules/`) gets the seven guidelines in the format it reads. Having an agent installed on your machine never sprinkles rule files into repos that don't use it — adopt one there with `--all` or `--only <agent>`. Shared files are edited between markers, so re-running is a safe no-op and your own content is preserved.
 
 ```bash
 npx @clawnify/greybeard --list        # show detected agents
@@ -258,11 +254,22 @@ npx @clawnify/greybeard --uninstall   # remove what it added
 
 Supported: **Claude Code, OpenCode, Cursor, Windsurf, Cline, GitHub Copilot, Codex, Gemini CLI, OpenClaw** — and any agent that reads `CLAUDE.md` / `AGENTS.md`.
 
-**Claude Code plugin marketplace** (the skills + the three commands + always-on guidelines):
+**The standalone installer and the plugin provide different things.** `npx @clawnify/greybeard --only codex` appends the guidelines to this project's `AGENTS.md`; it does **not** install Codex skills or a Codex plugin. Install the plugin separately to get the seven workflows. The installer manages the Claude Code plugin through `claude plugin`, and copies skills for OpenClaw; the other rule-file integrations supply guidelines.
+
+**Codex plugin marketplace** (all seven skills):
+
+```bash
+codex plugin marketplace add clawnify/greybeard
+codex plugin add greybeard@greybeard
+```
+
+Start a fresh session after installation or updating. In the skill selector, confirm `greybeard:pressure-test`, `greybeard:sidenote`, `greybeard:visualize`, `greybeard:wrap`, `greybeard:skillify`, `greybeard:check-resolvable`, and `greybeard:verify-responsive` each appear once. An “installed, enabled” plugin listing alone does not verify skill discovery. If the catalog is stale, restart Codex.
+
+**Claude Code plugin marketplace** (all seven skills, slash invocations, and the session hook):
 
 ```
 /plugin marketplace add clawnify/greybeard
-/plugin install greybeard
+/plugin install greybeard@greybeard
 ```
 
 The plugin ships a `SessionStart` / `SubagentStart` hook that injects the three-pillars decision test (scalable / long term / efficient — the core of `/pressure-test`) into every session automatically — installing the plugin is enough, no per-project `npx` run needed. It's careful not to double up: if the full guidelines are already in your `~/.claude/CLAUDE.md` or a project's `CLAUDE.md` / `AGENTS.md` (via the npx installer or a hand-merge), the hook detects them and stays silent. To turn injection off without uninstalling, set `GREYBEARD=off` in your environment.
@@ -284,16 +291,23 @@ curl https://raw.githubusercontent.com/clawnify/greybeard/main/CLAUDE.md >> CLAU
   npx @clawnify/greybeard@latest
   ```
 
-- **Claude Code plugin** — there's no `/plugin update`; refresh the marketplace, then reinstall (third-party marketplaces don't auto-update by default). You can flip on auto-update in `/plugin` → **Marketplaces**:
+- **Codex plugin** — refresh the marketplace snapshot and install the refreshed plugin, then start a fresh session:
 
+  ```bash
+  codex plugin marketplace upgrade greybeard
+  codex plugin add greybeard@greybeard
   ```
-  /plugin marketplace update greybeard
-  /plugin uninstall greybeard@greybeard
-  /plugin install greybeard@greybeard
-  /reload-plugins
+
+- **Claude Code plugin** — refresh the marketplace and update the installed plugin, then restart Claude Code:
+
+  ```bash
+  claude plugin marketplace update greybeard
+  claude plugin update greybeard@greybeard
   ```
 
 - **Manual (curl)** — re-run the `-o` form; it overwrites `CLAUDE.md` with the latest (the `>>` append form would duplicate).
+
+The migration keeps the existing Claude Code names and optional arguments. Updating replaces the old command-only package with the seven-skill package; no manual command copies are needed. If you previously copied workflows into personal directories yourself, remove those old copies when adopting the plugin so each capability appears once.
 
 > The per-agent rule files are generated from `CLAUDE.md` (the single source) by `scripts/build-rules.js`. Contributors: edit `CLAUDE.md`, run `npm run build`, commit. CI (`npm run check-sync`) fails if a copy drifts.
 

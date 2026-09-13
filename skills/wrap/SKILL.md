@@ -1,9 +1,12 @@
 ---
-description: Rule on whether this session can end here — finish the loop now, or make the work durable enough that another agent can pick it up.
+name: wrap
+description: "Rule on whether this session can end here — finish the loop now, or make the work durable enough that another agent can pick it up. Use when the user asks to wrap up, hand off, or decide whether this session or worktree can be closed."
 argument-hint: [what to wrap — optional]
 ---
 
-Answer one question about **$ARGUMENTS** — or, if that's empty, about this whole session: **can I close this and delete the worktree?**
+The optional input is the text supplied with this skill invocation, through a slash command or a plain-language request. If none was supplied, follow the no-input behavior below.
+
+Answer one question about **the supplied input** — or, if that's empty, about this whole session: **can I close this and delete the worktree?**
 
 There are two rulings, and you owe me exactly one of them: **finish it now**, or **wrap it** — turn what's here into something durable and tell me it's safe to delete. "Mostly done, maybe keep it around" is not a ruling — it is the third outcome, the one you get by declining to choose, and it is the most expensive of the three: a worktree nobody will reopen and nobody dares delete.
 
