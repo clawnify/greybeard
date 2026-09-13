@@ -1,9 +1,12 @@
 ---
-description: Draw the thing under discussion — the real shape, from the real code, anchored to file:line.
+name: visualize
+description: "Draw the thing under discussion — the real shape, from the real code, anchored to file:line. Use when the user asks to visualize code, architecture, or a flow; use verify-responsive to check a running UI at a viewport width."
 argument-hint: [what to visualize — optional]
 ---
 
-Show me **$ARGUMENTS** visually — or, if that's empty, whatever is currently on the table in this conversation. Skip the preamble, keep the prose short, and pick the *smallest* view that makes the point.
+The optional input is the text supplied with this skill invocation, through a slash command or a plain-language request. If none was supplied, follow the no-input behavior below.
+
+Show me **the supplied input** visually — or, if that's empty, whatever is currently on the table in this conversation. Skip the preamble, keep the prose short, and pick the *smallest* view that makes the point.
 
 **Draw what's there, not what you'd expect to be there.** A diagram launders a guess better than prose ever could: boxes and arrows read as *verified* even when nobody opened the file. Prose hedges out loud ("it probably calls…"); a flowchart just asserts. That makes an ungrounded visual the most expensive thing you can hand someone — they'll build on it for weeks.
 

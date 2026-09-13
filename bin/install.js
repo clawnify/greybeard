@@ -149,11 +149,11 @@ function rel(p) { return p.startsWith(HOME) ? '~' + p.slice(HOME.length) : path.
 // The canonical principles payload for fenced installs = the generated AGENTS.md.
 const PRINCIPLES = fs.readFileSync(path.join(PKG, 'AGENTS.md'), 'utf8');
 // Skill directories shipped to every provider that reads skills. Add a new one here only.
-const SKILLS = ['skillify', 'check-resolvable', 'verify-responsive'];
+const SKILLS = ['skillify', 'check-resolvable', 'verify-responsive', 'pressure-test', 'sidenote', 'visualize', 'wrap'];
 // Command files earlier versions copied into ~/.claude/commands (plus 'scalable',
 // the pre-rename name of pressure-test). The plugin ships these now; this list
 // exists only to clear the copies off machines that still carry them. Nothing to
-// add here for a new command — the plugin picks it up from commands/.
+// add here for a new command — the plugin picks it up from skills/.
 const LEGACY_COMMAND_COPIES = ['pressure-test', 'sidenote', 'visualize', 'wrap', 'scalable'];
 
 // ── Per-provider install / uninstall ────────────────────────────────────────

@@ -48,8 +48,8 @@ function alreadyLoaded(cwd) {
   return false;
 }
 
-// The condensed behavioral core: the three pillars (from commands/
-// pressure-test.md) plus the highest-frequency stances from CLAUDE.md
+// The condensed behavioral core: the three pillars (from
+// skills/pressure-test/SKILL.md) plus the highest-frequency stances from CLAUDE.md
 // (opinionated tradeoffs, symptom-vs-diagnosis, stale time budgets). Keep
 // wording in sync with those files — and keep this block small: it is paid
 // as context in every session and subagent, so a rule earns a paragraph

@@ -15,6 +15,17 @@ Procedures captured with `skillify`. Each one exists because reasoning about the
 |-------|--------------|
 | [`verify-responsive`](./verify-responsive/SKILL.md) | Render the real page at real viewport widths in fixed-width iframes, then drive and assert it from the parent. |
 
+## On-demand workflows
+
+| Skill | Use when |
+|-------|----------|
+| [`pressure-test`](./pressure-test/SKILL.md) | Pressure-test a decision, or audit every approach proposed in the session when no target is supplied. |
+| [`sidenote`](./sidenote/SKILL.md) | Park a thought without acting on it, or list open notes when no thought is supplied. |
+| [`visualize`](./visualize/SKILL.md) | Draw the verified structure of code or a flow; no input means the current topic. |
+| [`wrap`](./wrap/SKILL.md) | Decide whether a session can end and prepare a durable handoff; no input means the whole session. |
+
+These are the canonical instruction sources. Claude Code exposes them as slash commands directly, so there are no duplicate command wrappers. Inputs come from the invoking message in any client; the substantive procedures and authorization boundaries are the same.
+
 ## The decision test
 
 Behind every choice these skills make — *should I skillify this? generalize how far? merge or keep separate?* — is one question:
@@ -36,22 +47,21 @@ The library is only as valuable as the resolver is clean:
 
 ## Install
 
-These are standard [Claude Code Agent Skills](https://code.claude.com/docs/en/skills) — a directory with a `SKILL.md`. The `name` + `description` frontmatter is portable to any harness that reads skills (Cursor, Codex, OpenClaw).
+Use the plugin manager for [Claude Code or Codex](../README.md#install). Both discover all seven skills from this directory. Claude Code also exposes `/greybeard:<name>`; Codex offers `$greybeard:<name>` through its skill selector and can match plain-language requests. Restart the client after a plugin update and verify each capability appears once in a fresh session.
 
-**Claude Code** installs them as part of the greybeard plugin, through its own plugin manager — no copying, and `claude plugin update` keeps them current:
+The standalone installer writes guidelines for Codex, manages the Claude Code plugin, and copies all seven skills for OpenClaw. Writing `AGENTS.md` alone does not install skills. See the [installation and update instructions](../README.md#install) for the distinction.
 
-```bash
-claude plugin marketplace add clawnify/greybeard
-claude plugin install greybeard@greybeard
-```
-
-(`npx @clawnify/greybeard` runs those two for you.) Don't also copy the directories into `~/.claude/skills/` — that puts two copies of every skill in the resolver, which is the exact thing `check-resolvable` exists to catch.
-
-**Any other harness** reads skills from a directory, so copy them in:
+For a **manual, project-local Codex installation**, run this from the Greybeard checkout, replacing the destination with your project path:
 
 ```bash
-mkdir -p ~/.claude/skills
-cp -R skillify check-resolvable verify-responsive ~/.claude/skills/   # or .claude/skills/ for one project
+mkdir -p /path/to/project/.agents/skills
+cp -R skills/skillify skills/check-resolvable skills/verify-responsive \
+  skills/pressure-test skills/sidenote skills/visualize skills/wrap \
+  /path/to/project/.agents/skills/
 ```
 
-Then add a one-line entry for each to your project's resolver (`AGENTS.md` / `CLAUDE.md`) so the agent — and your teammates — can find them. After that, just say *"skillify this"* when you finish something worth keeping.
+Copy all seven sibling folders together so relative skill links keep working after installation. Other clients need their own documented skill directory. Use either a manual copy or the plugin for a given client, not both. In clients without automatic skill indexing, add one entry per skill to the project's resolver, pointing to its installed `SKILL.md`.
+
+## Verify discovery after changing the package
+
+Check a fresh install and an update from the previous revision using each client's plugin manager. Repeating the install must not add another entry. In Codex, query the app server's `skills/list` for a clean project and verify the seven enabled `greybeard:*` entries point into the installed plugin cache. In Claude Code, `claude plugin details greybeard@greybeard` must list seven skills once each; also check slash invocation with and without input. Inspect installed relative links, then run `check-resolvable` across the seven descriptions and procedures. Source frontmatter validation alone does not prove discovery.
