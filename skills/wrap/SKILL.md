@@ -33,17 +33,27 @@ Look, don't recall. Run the checks and report what they said:
 
 Then the item that never shows up in any of those, and is the reason most handoffs are useless: **the context.** What you tried that didn't work, why the obvious approach is wrong, the reproduction that took twenty minutes to find, the file you ruled out. The diff survives; that dies with the session. It is the most expensive thing in the worktree and the only one with no automatic record.
 
+Last, **the open loops**: the item that passes the test above and still gets dropped. List every step still open when this session ends, whoever owns it:
+
+- the steps you're handing me: "left for you", "after that", decisions still pending;
+- every promise this session made: "tell me when it's green and I'll delete the old secrets" has nobody to tell once the session is gone;
+- every promise you're relaying from another agent: "the other task reported that bug" is a claim until you've seen the URL.
+
+Each needs an owner and a tracker URL: an issue, a PR, a board card. A list in a doc or in chat is not a tracker. It survives the worktree, so it passes the test, and it still reminds no one.
+
 ## The ladder — pick the cheapest form that actually carries it
 
-One artifact, not three. Match the form to what has to survive:
+One artifact per kind of thing, not three copies of one. Match the form to what has to survive:
 
 | What's here | Where it goes |
 |---|---|
-| Nothing — merged, clean, no unpushed commits | Nowhere. Say so and close. |
+| Nothing — merged, clean, no unpushed commits, no open loops | Nowhere. Say so and close. |
 | A lead or a hunch. No code, no decision | A `/sidenote` entry — it already lives in git's common dir, outside every worktree. |
 | A decision, a design, knowledge the next change needs | A doc in the repo, committed **and pushed**. Memory is an index, not an archive (§7). |
 | A defined next task, nothing written yet | A **GitHub issue**: title + the brief below. |
 | Code exists and is incomplete | Commit it on the branch, **push it**, open a **draft PR** whose body is the brief. |
+
+Knowledge and tasks don't share a form. When the session leaves both the reasoning and steps still to do, the reasoning goes in the doc and the steps go in one issue that links to it: a checklist, in order, with an owner on each line. The easy mistake is folding the steps into the doc's `Left` section because the doc already exists.
 
 Two notes on that last pair. A pull request needs at least one commit — there is no PR with an empty diff, so "a PR with just a description" is either an *issue*, or a PR whose diff **is** the brief committed as a doc. And once the branch is pushed, the branch is the artifact: deleting the worktree costs you nothing. Never delete a worktree whose branch is unpushed and unmerged — that is the one deletion that actually loses work.
 
@@ -54,7 +64,7 @@ Whichever form you picked, the body is the same five lines, written for someone 
 ```
 Goal      — what this is for, in one line.
 Done      — what works now, and the check you actually ran to know it.
-Left      — the exact next step. Not "continue the refactor".
+Left      — the exact next step and who owns it. Not "continue the refactor".
 Rejected  — approaches that don't work, and why. This is the part that dies with the context.
 Verify    — the command or check that says it's finished.
 ```
@@ -66,7 +76,8 @@ Anchor it: the `file:line` where the next agent starts reading. And keep it hone
 1. **Show me the ruling and the artifact before you create it** — the form, the title, the body. Issues, PRs and pushes are outward-facing and awkward to take back; one confirmation, then go.
 2. **Confirm it landed outside the worktree.** The push shows the branch on the remote; `gh issue create --title "…" --body-file …` and `gh pr create --draft --title "…" --body-file …` each print a URL — quote it. A commit that was never pushed is not a handoff, it is the same work in a smaller box (§4: it compiles is not it works).
 3. **Don't run the deletion.** You are standing in the worktree; removing it from inside is how a session ends mid-sentence. Hand me the command — `git worktree remove <path>`, run from another checkout — and say plainly if it needs `-f`, because a dirty tree means step 2 didn't finish.
-4. **Close with the verdict on its own line**, because it's the question I asked:
+4. **Reread your own closing message before the verdict.** Every open step in it, whether mine, yours or another agent's, needs its tracker URL next to it. A step without one makes the verdict `Not yet`, and that step is the one thing.
+5. **Close with the verdict on its own line**, because it's the question I asked:
    - `Safe to close — <URL> carries it.`
    - `Not yet — <the one thing> has to close here first.`
 
