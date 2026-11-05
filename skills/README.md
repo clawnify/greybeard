@@ -21,7 +21,7 @@ Procedures captured with `skillify`. Each one exists because reasoning about the
 |-------|----------|
 | [`pressure-test`](./pressure-test/SKILL.md) | Pressure-test a decision, or audit every approach proposed in the session when no target is supplied. |
 | [`sidenote`](./sidenote/SKILL.md) | Park a thought without acting on it, or list open notes when no thought is supplied. |
-| [`visualize`](./visualize/SKILL.md) | Draw the verified structure of code or a flow; no input means the current topic. |
+| [`visualize`](./visualize/SKILL.md) | Draw a verified process change, flow, or code structure; no input means the current topic. |
 | [`wrap`](./wrap/SKILL.md) | Decide whether a session can end and prepare a durable handoff; no input means the whole session. |
 
 These are the canonical instruction sources. Claude Code exposes them as slash commands directly, so there are no duplicate command wrappers. Inputs come from the invoking message in any client; the substantive procedures and authorization boundaries are the same.

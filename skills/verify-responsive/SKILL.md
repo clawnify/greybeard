@@ -71,4 +71,4 @@ So a layout that branches on width is covered honestly. One that branches on `@m
 
 ## Related
 
-- [`/visualize`](../visualize/SKILL.md) draws the *structure* of the code. This renders the *running UI*. Use this one when the question is "what does it actually look like at this width."
+- [`/visualize`](../visualize/SKILL.md) draws the *process* a change alters, or the *structure* of the code. This renders the *running UI*. Use this one when the question is "what does it actually look like at this width."
