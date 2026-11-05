@@ -1,6 +1,6 @@
 ---
 name: visualize
-description: "Draw the thing under discussion — the real shape, from the real code, anchored to file:line. Use when the user asks to visualize code, architecture, or a flow; use verify-responsive to check a running UI at a viewport width."
+description: "Draw the thing under discussion: the process change or the code shape, whichever the question is about, grounded in the real code and anchored to file:line. Use when the user asks to visualize a change, a process, a flow, code, or architecture; use verify-responsive to check a running UI at a viewport width."
 argument-hint: [what to visualize — optional]
 ---
 
@@ -16,6 +16,8 @@ So, before drawing:
 - **Anchor every node.** Participants, boxes, tree entries, and call-stack frames name a real `path/to/file.ts:42`. A node you can't anchor is a node you didn't verify.
 - **Tag what you didn't open — `ASSUMED`.** Sometimes a branch matters to the shape but you haven't read it (an upstream SDK, a path that's out of scope). Draw it, mark it `ASSUMED`, and say what would confirm it. Never quietly complete the picture; a diagram that's 90% verified and 10% invented, unmarked, is 100% untrustworthy.
 - **Draw the current shape before the proposed one — and trace it with the real input.** If the point is a change, the "before" side comes from the code as it is today, not as you'd have written it. An anchor proves the node exists; it does not prove the arrow fires. Before drawing a current shape for input X, carry X itself through every lookup, guard, and branch on the path — the registry has that key, the config applies to it, the early return isn't taken. If the trace dead-ends, the dead end *is* the current shape: draw the failure, not the flow you expected. And a node whose annotation contradicts the diagram's own conclusion is a node you haven't reconciled — resolve it or prune it before shipping the picture.
+
+**Pick the altitude before the form.** "Show me this change" is usually a question about the *process*: what now happens differently, for whom, in what order. It is rarely a question about which files moved. The code diff is how the change was made; the process change is what it means. So when the topic is a change, draw the before and after of the behavior first, in the actor's words (the user, the agent, the system), and hang the `file:line` anchors on each step. Drop to code structure (file trees, call trees, code diffs) only when the question is about the code itself, such as where something lives, how it's wired, or what a refactor moves, or when asked. If both views earn a place, the process comes first and the code view is the second, smaller one.
 
 ### Forms
 
@@ -33,6 +35,17 @@ Use one, sometimes a few, rarely all. Match the form to the question being asked
 - **Running as a subagent, hand the picture back.** Your reply goes to the agent that spawned you, and a user-facing renderer may replace what that agent is showing. Return the text form or a file path, unless that agent asked you to render it.
 
 If nothing in the session renders, or you can't tell, the forms below are complete on their own.
+
+- **A process or behavior change**, the default for a change. The steps before and after, in the actor's words, each anchored to the code that makes it happen. Use a `diff` when a few steps move, and two columns when the whole sequence differs:
+
+  ```diff
+   user submits the form                     app/form.tsx:88
+  -  page waits until the agent has started
+  -  session page opens
+  +  session page opens right away           app/form.tsx:96
+  +  agent starts in the background          lib/agent.ts:104
+  +  result streams into the open page       hooks/use-session-events.ts:9
+  ```
 
 - **Logic or an algorithm** — pseudocode:
 
@@ -92,7 +105,7 @@ If nothing in the session renders, or you can't tell, the forms below are comple
       D-->>UI: stream result
   ```
 
-- **What changes**, when the surrounding shape already exists — a `diff`, shaped like whatever the topic is (component tree, file layout, call stack, control flow):
+- **What changes in the code**, when the question is about the code's structure and the surrounding shape already exists — a `diff`, shaped like whatever the topic is (component tree, file layout, call stack, control flow):
 
   ```diff
    src/
