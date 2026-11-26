@@ -53,6 +53,8 @@ Then judge the approach against the **three pillars** — name specifics, not ab
 
 **Plus any pillars this project adds.** The three above always stand; if the company/codebase has its own vision pillars (e.g. Portability, Privacy, Offline-first), find them in its `CLAUDE.md` / `AGENTS.md` / vision docs and judge against those too — they extend the three, never replace them.
 
+Use the defaults automatically. If the question says “prioritize efficiency,” give efficiency extra weight while checking all three pillars. If it says “also consider privacy,” assess privacy alongside them. Carry that adjustment through follow-ups on the same decision. Start the next decision with the usual project defaults.
+
 Then:
 
 - **Be decisive.** Recommend ONE option. Don't survey alternatives you won't take.
