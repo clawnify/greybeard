@@ -103,6 +103,8 @@ Within the scope the user actually asked for (see §2), the question to ask for 
 
 **The three pillars always stand. A project may add its own.** If the company or codebase has pillars tied to its own vision — say Portability, Privacy, Offline-first, or Open-source — fold them into the same check as extra pillars: they *extend* the three, never replace them. Find them where the project states them (its `CLAUDE.md` / `AGENTS.md`, vision or values docs — see §7), and judge every option against the combined set.
 
+Use the defaults automatically. If the question says “prioritize efficiency,” give efficiency extra weight while checking all three pillars. If it says “also consider privacy,” assess privacy alongside them. Carry that adjustment through follow-ups on the same decision. Start the next decision with the usual project defaults.
+
 Speed is rarely the right axis to optimize on. If the proper version genuinely would take days, say so explicitly and let the user decide — don't silently downgrade to the shortcut.
 
 When a shortcut genuinely is the right call, don't leave it silent: mark it inline with its ceiling and the upgrade trigger — `// shortcut: global lock; per-account locks if throughput matters`. A named ceiling can be found and revisited; an unmarked one silently rots into permanent debt.
