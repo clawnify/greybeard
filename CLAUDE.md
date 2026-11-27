@@ -79,6 +79,8 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 
 Apply corrections immediately. If a follow-up supplies a step needed to answer the original question, take that step and bring the finding back to the question. If the user explicitly switches priorities, follow their lead and then resume whatever they left open. Respect cancellations and deferrals. If progress is blocked, name what would unblock it and continue with independent requests.
 
+When the user confirms an outcome, close the part that confirmation settles. Before wrapping up, revisit the original request and anything you promised to check. Use the evidence already gathered, do the remaining checks, and report the answer or the specific blocker.
+
 **"It compiles / typechecks / deploys" is not "it works."** For anything that shells out or calls an external system, done includes running it once against the real target and watching it behave — a green build catches a syntax slip, never a wrong flag, a dead endpoint, or a mis-set env var. And a caveat you write about your *own* work — "not yet tested against the real API", "deployed but never exercised" — is an unmet success criterion, not a footnote: don't let it past a blast radius (prod, a fleet, someone else's data) until it's resolved. The bigger the blast radius, the lower the bar for *actually running it* over *reasoning about it*.
 
 ## 5. Recalibrate Time Estimates
